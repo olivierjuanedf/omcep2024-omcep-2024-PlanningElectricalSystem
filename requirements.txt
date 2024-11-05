@@ -1,0 +1,7 @@
+ipykernel
+linopy
+highspy
+pandas
+matplotlib
+matplotlib-inline
+pypsa
