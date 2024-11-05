@@ -1,9 +1,8 @@
-# Class Title
-
+# OMCEP 2024
 ## Requirements 
 
 * a Github account: If not the case, go https://github.com/ and sign up
-* enroll the classroom as a student: go ==missing url==
+* enroll the classroom as a student: go and accept the assignment [classroom](https://classroom.github.com/classrooms/130312002-omcep2024)
 ![step 1n, enrolling](/.assets/img/enroll1.png)
 * Click to accept the assignment
 
