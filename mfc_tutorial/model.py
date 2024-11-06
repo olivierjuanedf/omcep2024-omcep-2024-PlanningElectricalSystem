@@ -10,8 +10,7 @@ import datetime
 t_0 = datetime.datetime(year = 2030, month = 1, day = 7, hour = 7, minute = 0)
 
 #Time horizon 
-T = 12 #h
-
+T = 6 #h
 
 #Choose the number n_x of discrete space steps and 
 n_x=10
@@ -50,10 +49,8 @@ def gen_init_distrib():
     # Returns the initial distribution
 
     m_0 = { i :  np.array([0.0 for _ in i_x]) for  i in I }
-
-    # Be careful of the discrete states of your model. If there is a source term, you have to consider the fact that there is a mass 0 for some modes. 
     
-    m_0[0][0] = 1 #/delta_x
+    m_0[0][0] = 1 # all the EV are in mode 0 with 0 SoC at initial time
 
     return m_0
 
@@ -160,7 +157,7 @@ def r(t):
 
 
 #Signal tracking penalization function
-c_4 = 5
+c_4 = 10
 def phi(r,x):
     return 0.5*c_4*(r - x)**2
 
