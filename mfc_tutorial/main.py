@@ -9,7 +9,7 @@ from simulation_fleet import *
 ######## Question 1 #######
 #### Influence of the parameters on the convergence of Frank Wolfe ######
 
-max_iteration = 10
+max_iteration = 100
 acceleration = False 
 if acceleration :
     (list_epsilon,rho,u)= gfw_accelerated(max_iteration )
