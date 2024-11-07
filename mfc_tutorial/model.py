@@ -103,14 +103,14 @@ def c(k,i,l):
 #Define the terminal cost g:
 def g(i,s):
     s_p=s/n_x
-    c_1 = 75
+    c_1 = 10
     c_2  = 0.7
     return c_1*max(0,c_2-s_p)**2
 
 
 #Define L to penalize high transitions values:
 
-c_3 = 5  #constant for affecting the transitions costs
+c_3 = 100  #constant for affecting the transitions costs
 
 def L(x):
     if x==0: 
@@ -157,7 +157,7 @@ def r(t):
 
 
 #Signal tracking penalization function
-c_4 = 10
+c_4 = 70
 def phi(r,x):
     return 0.5*c_4*(r - x)**2
 
