@@ -18,7 +18,6 @@ import pypsa
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from dataclasses import dataclass
 
 """Fix a few "global" parameters to simply modify a few elements when making "sensitivity tests"
 """
@@ -62,44 +61,6 @@ for country in COUNTRIES:
     wind_off_shore[country] = full_wind_off_shore[country].get_group(climatic_year)
     solar_pv[country] = full_solar_pv[country].get_group(climatic_year)
 
-"""Get data only for the considered climatic year
-
-**[Optional, for better parametrization of assets]**
-"""
-
-# [Coding trick] dataclass is a simple way to define object to store multiple attributes
-@dataclass
-class FuelSources:
-    name: str
-    co2_emissions: float
-    committable: bool
-    min_up_time: float
-    min_down_time: float
-    energy_density_per_ton: float  # in MWh / ton
-    cost_per_ton: float
-    primary_cost: float = None  # € / MWh (multiply this by the efficiency of your power plant to get the marginal cost)
-# [Coding trick] this function will be applied automatically at initialization of an object of this class
-    def __post_init__(self):
-      if self.energy_density_per_ton != 0:
-          self.primary_cost = self.cost_per_ton / self.energy_density_per_ton
-      else:
-          self.primary_cost = 0
-
-"""**[Optional, following previous point]** Define dictionary of asset parameters"""
-
-fuel_sources = {
-    "Coal": FuelSources("Coal", 760, True, 4, 4, 8, 128),
-    "Gas": FuelSources("Gas", 370, True, 2, 2, 14.89, 134.34),
-    "Oil": FuelSources("Oil", 406, True, 1, 1, 11.63, 555.78),
-    "Uranium": FuelSources("Uranium", 0, True, 10, 10, 22394, 150000.84),
-    "Solar": FuelSources("Solar", 0, False, 1, 1, 0, 0),
-    "Wind": FuelSources("Wind", 0, False, 1, 1, 0, 0),
-    "Hydro": FuelSources("Hydro", 0, True, 2, 2, 0, 0),
-    "Biomass": FuelSources("Biomass", 0, True, 2, 2, 5, 30)
-}
-# print a given attribute, of asset Coal here, to check proper initialization
-fuel_sources["Coal"].primary_cost
-
 """Initialize PyPSA Network (basis of all!). And print it to check that for now it is... empty"""
 
 modeled_countries = ["italy"]  # unique country modeled in this example
@@ -110,7 +71,8 @@ network
 
 # [Coding trick] capitalize to put a string with first character in capital letter
 # N.B. Italy coordinates set randomly!
-coordinates = {"italy": (12.5674, 41.8719)}
+from italy_parameters import gps_coords
+coordinates = {"italy": gps_coords}
 for country in modeled_countries:
     network.add("Bus", name=f"{country.capitalize()}", x=coordinates[country][0], y=coordinates[country][1])
 
@@ -121,45 +83,12 @@ for country in modeled_countries:
 # p_min_pu -> minimal power level - as % of capacity, set to 0 to start simple
 # p_max_pu -> idem, maximal power. Can integrate Capacity Factors (or maintenance)
 country_trigram = country.upper()[:3]
-generators = [
-    {"name": f"Hard-Coal_{country_trigram}", "carrier": "Coal", "p_nom": 2362,
-     "p_min_pu": 0, "p_max_pu": 1,
-     "marginal_cost": fuel_sources["Coal"].primary_cost * 0.37,
-     "efficiency": 0.37, "committable": False},
-    {"name": f"Gas_{country_trigram}", "carrier": "Gas", "p_nom": 43672,
-     "p_min_pu": 0, "p_max_pu": 1,
-     "marginal_cost": fuel_sources["Gas"].primary_cost * 0.5,
-     "efficiency": 0.5, "committable": False},
-    {"name": f"Oil_{country_trigram}", "carrier": "Oil", "p_nom": 866,
-     "p_min_pu": 0, "p_max_pu": 1,
-     "marginal_cost": fuel_sources["Gas"].primary_cost * 0.4,
-     "efficiency": 0.4, "committable": False},
-    {"name": f"Other-non-renewables_{country_trigram}",
-     "carrier": "Other-non-renewables", "p_nom": 8239, "p_min_pu": 0,
-     "p_max_pu": 1, "marginal_cost": fuel_sources["Gas"].primary_cost * 0.4,
-     "efficiency": 0.4, "committable": False},
-    {"name": f"Wind-on-shore_{country_trigram}", "carrier": "Wind",
-     "p_nom": 14512, "p_min_pu": 0,
-     "p_max_pu": wind_on_shore[country][start_horizon:start_horizon+time_horizon_in_hours]["value"].values,
-     "marginal_cost": fuel_sources["Wind"].primary_cost, "efficiency": 1,
-     "committable": False},
-    {"name": f"Wind-off-shore_{country_trigram}", "carrier": "Wind",
-     "p_nom": 791, "p_min_pu": 0,
-     "p_max_pu": wind_on_shore[country][start_horizon:start_horizon+time_horizon_in_hours]["value"].values,
-     "marginal_cost": fuel_sources["Wind"].primary_cost, "efficiency": 1,
-     "committable": False},
-    {"name": f"Solar-pv_{country_trigram}", "carrier": "Solar", "p_nom": 39954,
-     "p_min_pu": 0, "p_max_pu": solar_pv[country][:time_horizon_in_hours]["value"].values,
-     "marginal_cost": fuel_sources["Solar"].primary_cost, "efficiency": 1,
-     "committable": False},
-    {"name": f"Other-renewables_{country_trigram}", "carrier": "Other-renewables",
-     "p_nom": 4466, "p_min_pu": 0, "p_max_pu": 1, "marginal_cost": 0,
-     "efficiency": 1, "committable": False},
-    # what is this - very necessary - last fictive asset?
-    {"name": f"Failure_{country_trigram}", "carrier": "Failure",
-     "p_nom": 1e10, "p_min_pu": 0, "p_max_pu": 1, "marginal_cost": 1e5,
-     "efficiency": 1, "committable": False}
-]
+from input.long_term_uc.fuel_sources import FUEL_SOURCES
+from italy_parameters import get_generators
+generators = get_generators(country_trigram=country_trigram, fuel_sources=FUEL_SOURCES, 
+                            wind_on_shore_data=wind_on_shore[country][start_horizon:start_horizon+time_horizon_in_hours],
+                            wind_off_shore_data=wind_off_shore[country][start_horizon:start_horizon+time_horizon_in_hours],
+                            solar_pv_data=solar_pv[country][:time_horizon_in_hours])
 
 """Loop over previous dictionary to add each of the generators to the PyPSA network"""
 
@@ -219,12 +148,12 @@ plt.tight_layout()
 
 # And "stack" of optimized production profiles
 network.generators_t.p.div(1e3).plot.area(subplots=False, ylabel="GW")
-from long_term_uc_io import OUTPUT_FIG_FOLDER, set_prod_figure
+from long_term_uc_io import set_prod_figure, set_price_figure
 plt.savefig(set_prod_figure(country=country, year=year, start_horizon=start_horizon))
 plt.tight_layout()
 
 # Finally, "marginal prices" -> meaning? How can you interprete the very constant value plotted?
 network.buses_t.marginal_price.mean(1).plot.area(figsize=(8, 3), ylabel="Euro per MWh")
-plt.savefig(f"{OUTPUT_FIG_FOLDER}/prices_{country}_{year}_{start_horizon}.png")
+plt.savefig(set_price_figure(country=country, year=year, start_horizon=start_horizon))
 plt.tight_layout()
 
