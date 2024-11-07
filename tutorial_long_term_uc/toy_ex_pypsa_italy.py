@@ -86,6 +86,7 @@ network.generators
 
 result = network.optimize(solver_name="highs")
 print(result)
+print(f"Total cost at optimum: {network.objective:.2f}")
 
 """**[Optional]** For those who want to get a standard .lp file containing the equations associated to the solved pb"""
 
@@ -93,10 +94,12 @@ from pathlib import Path
 import pypsa.optimization as opt
 from long_term_uc_io import OUTPUT_DATA_FOLDER
 m = opt.create_model(network)
-m.to_file(Path(f'{OUTPUT_DATA_FOLDER}/model_{country_trigram}.lp'))
+m.to_file(Path(f'{OUTPUT_DATA_FOLDER}/model_{country_trigram.lower()}.lp'))
 
 """Plot a few info/results"""
 import matplotlib.pyplot as plt
+
+print("Plot generation and prices figures")
 
 # p_nom_opt is the optimized capacity (that can be also a variable in PyPSA...
 # but here not optimized -> values in input data plotted)
