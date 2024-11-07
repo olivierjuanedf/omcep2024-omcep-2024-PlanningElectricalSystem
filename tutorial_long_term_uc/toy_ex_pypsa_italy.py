@@ -94,7 +94,7 @@ from pathlib import Path
 import pypsa.optimization as opt
 from long_term_uc_io import OUTPUT_DATA_FOLDER
 m = opt.create_model(network)
-m.to_file(Path(f'{OUTPUT_DATA_FOLDER}/model_{country_trigram}.lp'))
+m.to_file(Path(f'{OUTPUT_DATA_FOLDER}/model_{country_trigram.lower()}.lp'))
 
 """Plot a few info/results"""
 import matplotlib.pyplot as plt
