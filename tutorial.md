@@ -133,13 +133,35 @@ print(f'n_t = {n_t}, delta_t = {delta_t}, delta_x = {delta_x}, ratio = { ratio }
 The control *u* given by the function *gfw()* is implemented to a finite number of EVs using the function *build_trajectories_markov_chain()*. The associated consumption is compared with the target consumption with the function *plot_consumption()* and with the consumption associated with the mean field distribution with the function *plot_comparison_consumption()*.
 
 Evaluate the quality of the mean field approach with respect to the number of EVs to control.
+You can change the number of EVs to control in *main.py* by modifying the variable *n*.
+```python
+# n is the number of EVs to be controlled
+n = number_EV # variable number_EV is defined in model.py. 
+```
 
+To avoid running the algorithm each time, set the variable *run_gfw* to *False* at the beginning of *main.py*
 
 ## Question 3
 
 The distribution of the SoC of the population of EVs at the beginning and at the end of the period are compared thanks to the function *plot_initial_final_level_soc()*.
 
-Change the signal to follow in *model.py* by considering another .csv file
+Change the initial distribution in *model.py* and observe the impacts on the solutions :
+
+```python
+
+def gen_init_distrib():  
+    # Returns the initial distribution
+
+    m_0 = { i :  np.array([0.0 for _ in i_x]) for  i in I }
+    
+    m_0[0][0] = 1 # all the EV are in mode 0 with 0 SoC at initial time
+
+    return m_0
+```
+
+## Question 4
+
+Change the signal to follow (the variable $r_t$) in the file *model.py* by considering another .csv file 
 
 ```python
 ########################## For the mean field model ##########################
@@ -153,3 +175,4 @@ and correct the date of the beginning of the period correspondingly
 #Starting time of the optimization
 t_0 = datetime.datetime(year = 2030, month = 1, day = 7, hour = 7, minute = 0)
 ```
+What can you observe ?

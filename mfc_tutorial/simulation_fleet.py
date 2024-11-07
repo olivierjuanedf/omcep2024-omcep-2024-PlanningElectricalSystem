@@ -54,9 +54,10 @@ def plot_initial_final_level_soc(dict_trajectories :dict, filename):
     plt.ylabel('Density')
     plt.legend(loc='center right')
     plt.grid()
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output',filename+'.png' )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','figures',filename+'.png' )
     plt.savefig(path)
     plt.show()
+    plt.close()
     return None
 
 def build_conso_from_distribution(m: dict,nb_EV: int)->list:
@@ -78,11 +79,14 @@ def plot_consumption(m: dict,nb_EV: int, lab: str, title : str):
     plt.plot(new_x_axis, ref, alpha=0.5, color='red',label='Target conso')
     plt.xlabel('Time (h)')
     plt.ylabel('Power (kW)')
+    plt.title(title)
     plt.legend(loc='center right')
     plt.grid()
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output',title+'.png' )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','figures',title+'.png' )
     plt.savefig(path)
     plt.show()
+    plt.close()
+
 
 def plot_comparison_consumption  (m_1 : dict , m_2 :dict,  nb_EV : int  , lab : list , title : str):
    
@@ -102,17 +106,51 @@ def plot_comparison_consumption  (m_1 : dict , m_2 :dict,  nb_EV : int  , lab : 
     plt.plot(new_x_axis, ref, alpha=0.5, color='red',label='Target conso')
     plt.xlabel('Time (h)')
     plt.ylabel('Power (kW)')
+    plt.title(title)
     plt.legend(loc='center right')
     plt.grid()
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output',title+'.png' )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','figures',title+'.png' )
     plt.savefig(path)
     plt.show()
+    plt.close()
+
 
 def save_consumption(conso : list, filename: str):
 
     dict_conso = {(t_0+datetime.timedelta(hours = t)*delta_t).strftime("%m/%d/%Y, %H:%M:%S") : conso[t] for t in range(len(conso))}
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output',filename )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','data',filename )
     with open(path, 'w') as f:
         json.dump(dict_conso, f)
     return None
 
+def save_json(data ,file_name):
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','data',file_name )
+    with open(path, 'w') as f:
+        json.dump(data, f)
+    return None
+
+
+def load_control(file_name):
+    
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','data',file_name )
+    with open(path, 'r') as f:
+        u_str = json.load(f)
+
+    u = {}
+    for k1 in u_str.keys():
+        u[int(k1)] = {}
+        for k2 in u_str[k1].keys():
+            u[int(k1)][int(k2)] = u_str[k1][k2]
+
+    return u
+
+def load_distribution( file_name) :
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','data',file_name )
+    with open(path, 'r') as f:
+        rho_str = json.load(f)
+        
+    rho = {}
+    for k in rho_str.keys():
+        rho[int(k)] = rho_str[k]
+       
+    return rho

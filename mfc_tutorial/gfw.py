@@ -208,9 +208,11 @@ def plot_primal_gap(list_gap : list):
     plt.xlabel('Iterations')
     plt.legend(loc='center right')
     plt.grid()
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','upper_bound_primal_gap.png' )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','figures','upper_bound_primal_gap.png' )
     plt.savefig(path)
     plt.show()
+    plt.close()
+
     return None
 
 def plot_log_primal_gap(list_gap : list):
@@ -221,8 +223,10 @@ def plot_log_primal_gap(list_gap : list):
     plt.xlabel('log terations')
     plt.legend(loc='center right')
     plt.grid()
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','log_log_upper_bound_primal_gap.png' )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','figures','log_log_upper_bound_primal_gap.png' )
     plt.savefig(path)
     plt.show()
+    plt.close()
+
     return None
 
