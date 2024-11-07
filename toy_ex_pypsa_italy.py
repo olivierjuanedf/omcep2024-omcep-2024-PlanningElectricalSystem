@@ -220,7 +220,7 @@ plt.tight_layout()
 
 # And "stack" of optimized production profiles
 network.generators_t.p.div(1e3).plot.area(subplots=False, ylabel="GW")
-plt.savefig(f"output/long-term_uc/prod_{country}_{year}_{start_horizon}.png")
+plt.savefig(f"output/long-term_uc/figures/prod_{country}_{year}_{start_horizon}.png")
 plt.tight_layout()
 
 # Finally, "marginal prices" -> meaning? How can you interprete the very constant value plotted?
