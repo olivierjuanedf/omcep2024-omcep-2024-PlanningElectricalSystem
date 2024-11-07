@@ -54,7 +54,7 @@ def plot_initial_final_level_soc(dict_trajectories :dict, filename):
     plt.ylabel('Density')
     plt.legend(loc='center right')
     plt.grid()
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','figures',filename+'.png' )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','mfc','figures',filename+'.png' )
     plt.savefig(path)
     plt.show()
     plt.close()
@@ -82,7 +82,7 @@ def plot_consumption(m: dict,nb_EV: int, lab: str, title : str):
     plt.title(title)
     plt.legend(loc='center right')
     plt.grid()
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','figures',title+'.png' )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','mfc','figures',title+'.png' )
     plt.savefig(path)
     plt.show()
     plt.close()
@@ -109,7 +109,7 @@ def plot_comparison_consumption  (m_1 : dict , m_2 :dict,  nb_EV : int  , lab : 
     plt.title(title)
     plt.legend(loc='center right')
     plt.grid()
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','figures',title+'.png' )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','mfc','figures',title+'.png' )
     plt.savefig(path)
     plt.show()
     plt.close()
@@ -118,13 +118,13 @@ def plot_comparison_consumption  (m_1 : dict , m_2 :dict,  nb_EV : int  , lab : 
 def save_consumption(conso : list, filename: str):
 
     dict_conso = {(t_0+datetime.timedelta(hours = t)*delta_t).strftime("%m/%d/%Y, %H:%M:%S") : conso[t] for t in range(len(conso))}
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','data',filename )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','mfc','data',filename )
     with open(path, 'w') as f:
         json.dump(dict_conso, f)
     return None
 
 def save_json(data ,file_name):
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','data',file_name )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','mfc','data',file_name )
     with open(path, 'w') as f:
         json.dump(data, f)
     return None
@@ -132,7 +132,7 @@ def save_json(data ,file_name):
 
 def load_control(file_name):
     
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','data',file_name )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','mfc','data',file_name )
     with open(path, 'r') as f:
         u_str = json.load(f)
 
@@ -145,7 +145,7 @@ def load_control(file_name):
     return u
 
 def load_distribution( file_name) :
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'output','data',file_name )
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','mfc','data',file_name )
     with open(path, 'r') as f:
         rho_str = json.load(f)
         

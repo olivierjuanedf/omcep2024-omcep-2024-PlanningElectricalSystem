@@ -11,7 +11,7 @@ from simulation_fleet import *
 run_gfw = True
 
 if run_gfw :
-    max_iteration = 50
+    max_iteration = 5
     acceleration = False 
     if acceleration :
         (list_epsilon,rho,u)= gfw_accelerated(max_iteration )

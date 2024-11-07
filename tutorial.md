@@ -97,6 +97,7 @@ The function *gfw()* is called from the file *main.py* and the output is saved i
 The sequence of optimality gap is ploted by the function *plot_primal_gap()* and by the function *plot_log_primal_gap()* in a log-log scale. 
 The electric consumption associated with the distribution $\rho$ is computed by the function *build_conso_from_distribution()* and plot by *plot_consumption()*. 
 
+All the output of the algorithm are in the folders output/mfc/figures and output/mfc/data.
 
 ## Question 1 
 
@@ -166,7 +167,7 @@ Change the signal to follow (the variable $r_t$) in the file *model.py* by consi
 ```python
 ########################## For the mean field model ##########################
 
-signal_data_path =  os.path.join(os.getcwd(), 'input','charging_profiles_2030-1-7.csv')
+signal_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','long-term_uc','data','aggreg_ev_france_charging_profiles_2030-1-7.csv')
 signal = data_reader.read_signal(v2g = v2g, file_path=signal_data_path) 
 ```
 and correct the date of the beginning of the period correspondingly 
