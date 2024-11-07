@@ -39,7 +39,7 @@ p_max =10 #kW, pmax of the plugg. Same value for V1G and V2G
 if v2g: 
     I.append(-1) #we add the V2G mode
 
-static_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)), 'input','aggregate_ev_static_params.csv')
+static_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','output','long-term_uc','data','aggregate_ev_static_params.csv')
 number_EV,battery_capacity = data_reader.read_capacity_data(v2g = v2g, file_path=static_data_path)
 #battery_capacity = 80 #kWh
 #number_EV = 10000
@@ -133,7 +133,8 @@ def H(x):
 
 ########################## For the mean field model ##########################
 
-signal_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'input','charging_profiles_2030-1-7.csv')
+signal_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','long-term_uc','data',
+                                 'aggreg_ev_france_charging_profiles_2030-1-7.csv')
 signal = data_reader.read_signal(v2g = v2g, file_path=signal_data_path) 
 #signal_dict gives the average consumption per EV !
 signal_dict = {t :signal[signal['time'] == t_0 + datetime.timedelta(hours=t)]['power'].iloc[0] / number_EV for t in range(T+2)}
