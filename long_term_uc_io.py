@@ -1,0 +1,1 @@
+UC_OUTPUT_FIG_FOLDER = "output/long-term_uc/figures"

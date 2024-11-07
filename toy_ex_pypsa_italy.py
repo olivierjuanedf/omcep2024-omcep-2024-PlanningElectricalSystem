@@ -23,8 +23,7 @@ from dataclasses import dataclass
 """Fix a few "global" parameters to simply modify a few elements when making "sensitivity tests"
 """
 
-countries = ["germany", "poland", "france", "iberian-peninsula", "scandinavia",
-             "benelux", "italy"]
+from long_term_uc_constants import COUNTRIES
 year = 2025
 climatic_year = 2000
 start_horizon = 31 * 24
@@ -47,7 +46,7 @@ wind_off_shore = {}
 wind_on_shore = {}
 solar_pv = {}
 solar_csp = {}
-for country in countries:
+for country in COUNTRIES:
     # read csv files
     full_demand[country] = pd.read_csv(f"data/ERAA_2023-2/demand_{year}_{country}.csv", sep=";", index_col=1, parse_dates=True).groupby(
         pd.Grouper(key="climatic_year"))
@@ -220,7 +219,8 @@ plt.tight_layout()
 
 # And "stack" of optimized production profiles
 network.generators_t.p.div(1e3).plot.area(subplots=False, ylabel="GW")
-plt.savefig(f"output/long-term_uc/figures/prod_{country}_{year}_{start_horizon}.png")
+from long_term_uc_io import UC_OUTPUT_FIG_FOLDER
+plt.savefig(f"{UC_OUTPUT_FIG_FOLDER}/prod_{country}_{year}_{start_horizon}.png")
 plt.tight_layout()
 
 # Finally, "marginal prices" -> meaning? How can you interprete the very constant value plotted?
