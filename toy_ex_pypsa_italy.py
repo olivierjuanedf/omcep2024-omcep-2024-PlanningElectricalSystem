@@ -22,7 +22,7 @@ from dataclasses import dataclass
 
 """Fix a few "global" parameters to simply modify a few elements when making "sensitivity tests"
 """
-
+from long_term_uc_io import INPUT_ERAA_FOLDER
 from long_term_uc_constants import COUNTRIES
 year = 2025
 climatic_year = 2000
@@ -48,13 +48,13 @@ solar_pv = {}
 solar_csp = {}
 for country in COUNTRIES:
     # read csv files
-    full_demand[country] = pd.read_csv(f"data/ERAA_2023-2/demand_{year}_{country}.csv", sep=";", index_col=1, parse_dates=True).groupby(
+    full_demand[country] = pd.read_csv(f"{INPUT_ERAA_FOLDER}/demand_{year}_{country}.csv", sep=";", index_col=1, parse_dates=True).groupby(
         pd.Grouper(key="climatic_year"))
-    full_wind_on_shore[country] = pd.read_csv(f"data/ERAA_2023-2/PECD/capa_factor_wind_onshore_{year}_{country}.csv", index_col=1, parse_dates=True, sep=";").groupby(
+    full_wind_on_shore[country] = pd.read_csv(f"{INPUT_ERAA_FOLDER}/PECD/capa_factor_wind_onshore_{year}_{country}.csv", index_col=1, parse_dates=True, sep=";").groupby(
       pd.Grouper(key="climatic_year"))
-    full_wind_off_shore[country] = pd.read_csv(f"data/ERAA_2023-2/PECD/capa_factor_wind_offshore_{year}_{country}.csv", index_col=1, parse_dates=True, sep=";").groupby(
+    full_wind_off_shore[country] = pd.read_csv(f"{INPUT_ERAA_FOLDER}/PECD/capa_factor_wind_offshore_{year}_{country}.csv", index_col=1, parse_dates=True, sep=";").groupby(
       pd.Grouper(key="climatic_year"))
-    full_solar_pv[country] = pd.read_csv(f"data/ERAA_2023-2/PECD/capa_factor_solar_pv_{year}_{country}.csv", index_col=1, parse_dates=True, sep=";").groupby(
+    full_solar_pv[country] = pd.read_csv(f"{INPUT_ERAA_FOLDER}/PECD/capa_factor_solar_pv_{year}_{country}.csv", index_col=1, parse_dates=True, sep=";").groupby(
       pd.Grouper(key="climatic_year"))
     # then keep only selected climatic year
     demand[country] = full_demand[country].get_group(climatic_year)
@@ -219,11 +219,12 @@ plt.tight_layout()
 
 # And "stack" of optimized production profiles
 network.generators_t.p.div(1e3).plot.area(subplots=False, ylabel="GW")
-from long_term_uc_io import UC_OUTPUT_FIG_FOLDER
-plt.savefig(f"{UC_OUTPUT_FIG_FOLDER}/prod_{country}_{year}_{start_horizon}.png")
+from long_term_uc_io import OUTPUT_FIG_FOLDER, set_prod_figure
+plt.savefig(set_prod_figure(country=country, year=year, start_horizon=start_horizon))
 plt.tight_layout()
 
 # Finally, "marginal prices" -> meaning? How can you interprete the very constant value plotted?
 network.buses_t.marginal_price.mean(1).plot.area(figsize=(8, 3), ylabel="Euro per MWh")
+plt.savefig(f"{OUTPUT_FIG_FOLDER}/prices_{country}_{year}_{start_horizon}.png")
 plt.tight_layout()
 
