@@ -1,3 +1,0 @@
-name;ev_number;battery_capacity_e;v2g_capable;end_of_week_target_soc_e
-fra_v1g;1250;100000;false;80000
-fra_v2g;3125;250000;true;200000
