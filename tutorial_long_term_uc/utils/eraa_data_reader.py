@@ -37,7 +37,8 @@ def set_aggreg_cf_prod_types_data(df_cf_list: List[pd.DataFrame], prod_type_col:
 def gen_capa_pt_str_sanitizer(gen_capa_prod_type: str) -> str:
     # very ad-hoc operation
     sanitized_gen_capa_pt = gen_capa_prod_type.replace(" - ", " ")
-    sanitized_gen_capa_pt = str_sanitizer(raw_str=sanitized_gen_capa_pt)
+    sanitized_gen_capa_pt = str_sanitizer(raw_str=sanitized_gen_capa_pt, 
+                                          ad_hoc_replacements={"gas_": "gas", "(": "", ")": ""})
     return sanitized_gen_capa_pt
 
 
@@ -139,7 +140,7 @@ def get_countries_data(countries: List[str], year: int, climatic_year: int,
             current_df_gen_capa = pd.read_csv(gen_capa_data_file, sep=column_sep, decimal=decimal_sep)
             # Keep sanitize prod. types col values
             current_df_gen_capa[prod_type_col] = current_df_gen_capa[prod_type_col].apply(gen_capa_pt_str_sanitizer)
- 
+            bob = 1
             # Keep only selected aggreg. prod. types
             current_df_gen_capa = \
                 set_aggreg_col_based_on_corresp(df=current_df_gen_capa, col_name=prod_type_col,

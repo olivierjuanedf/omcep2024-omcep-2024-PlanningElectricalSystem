@@ -8,7 +8,7 @@ eraa_data_descr, uc_run_params = read_and_check_uc_run_params()
 """
 Get needed data (demand, RES Capa. Factors, installed generation capacities)
 """
-from data_reader import get_countries_data
+from utils.eraa_data_reader import get_countries_data
 from utils.basic_utils import get_period_str
 
 

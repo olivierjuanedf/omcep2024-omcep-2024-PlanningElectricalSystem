@@ -5,7 +5,8 @@ from common.constants_temporal import DAY_OF_WEEK
 from common.long_term_uc_io import DATE_FORMAT_PRINT
 
 
-def str_sanitizer(raw_str: Optional[str], replace_empty_char: bool = True) -> Optional[str]:
+def str_sanitizer(raw_str: Optional[str], replace_empty_char: bool = True, 
+                  ad_hoc_replacements: dict = None) -> Optional[str]:
     # sanitize only if str
     if isinstance(raw_str, str) is False:
         return raw_str
@@ -15,6 +16,11 @@ def str_sanitizer(raw_str: Optional[str], replace_empty_char: bool = True) -> Op
     if replace_empty_char is True:
         sanitized_str = sanitized_str.replace(" ", "_")
     sanitized_str = sanitized_str.lower()
+
+    # if specific replacements to be applied
+    if ad_hoc_replacements is not None:
+        for old_char, new_char in ad_hoc_replacements.items():
+            sanitized_str = sanitized_str.replace(old_char, new_char)
     return sanitized_str
 
 
