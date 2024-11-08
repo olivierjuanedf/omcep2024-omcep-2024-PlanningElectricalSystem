@@ -1,4 +1,4 @@
-# Tutorial
+# Tutorial - Mean-Field control part
 
 ## Tutorial Objectives
 
