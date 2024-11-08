@@ -140,5 +140,19 @@
     "italy": "green",
     "poland": "black",
     "scandinavia": "blue"
+  },
+  "per_agg_prod_type_color": {
+    "batteries": "pink",
+    "biofuel": "green",
+    "coal": "brown",
+    "dsr": "red",
+    "gas": "grey",
+    "hydro": "blue",
+    "nuclear": "olive",
+    "oil": "black",
+    "solar_pv": "yellow",
+    "solar_thermal": "orange",
+    "wind_offshore": "magenta",
+    "wind_onshore": "purple"
   }
 }

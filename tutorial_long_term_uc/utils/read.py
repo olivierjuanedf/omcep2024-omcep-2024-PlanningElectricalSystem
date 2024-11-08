@@ -1,5 +1,8 @@
 import json
 
+from common.long_term_uc_io import set_json_fixed_params_file, set_json_params_tb_modif_file
+from common.constants_extract_eraa_data import ERAADatasetDescr
+from common.uc_run_params import UCRunParams
 from utils.dir_utils import check_file_existence
 
 
@@ -12,3 +15,21 @@ def check_and_load_json_file(json_file: str, file_descr: str = None) -> dict:
     json_data = json.loads(f.read())
 
     return json_data
+
+
+def read_and_check_uc_run_params():
+    json_fixed_params_file = set_json_fixed_params_file()
+    json_params_tb_modif_file = set_json_params_tb_modif_file()
+    print(f"Read and check long-term UC parameters; the ones modified in file {json_params_tb_modif_file}")
+
+    json_params_fixed = check_and_load_json_file(json_file=json_fixed_params_file,
+                                                 file_descr="JSON fixed params")
+    json_params_tb_modif = check_and_load_json_file(json_file=json_params_tb_modif_file,
+                                                    file_descr="JSON params to be modif.")
+
+    print("... and check that modifications done are coherent with available ERAA data")
+    eraa_data_descr = ERAADatasetDescr(**json_params_fixed)
+    uc_run_params = UCRunParams(**json_params_tb_modif)
+    uc_run_params.process(available_countries=eraa_data_descr.available_countries)
+    uc_run_params.coherence_check(eraa_data_descr=eraa_data_descr)
+    return eraa_data_descr, uc_run_params

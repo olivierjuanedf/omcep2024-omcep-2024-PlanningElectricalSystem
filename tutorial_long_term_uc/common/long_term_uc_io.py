@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+from datetime import datetime
 
 
 @dataclass
@@ -39,6 +40,10 @@ DT_SUBFOLDERS = DtSubfolders()
 FILES_FORMAT = FilesFormat()
 INPUT_ERAA_FOLDER = "data/ERAA_2023-2"
 INPUT_LT_UC_FOLDER = "input/long_term_uc"
+# first date in ERAA data (fictive 364 days calendar)
+MIN_DATE_IN_DATA = datetime(year=1900, month=1, day=1)
+# first date NOT in ERAA data (fictive 364 days calendar)
+MAX_DATE_IN_DATA = datetime(year=1901, month=1, day=1)
 OUTPUT_DATA_FOLDER = "output/long_term_uc/data"
 OUTPUT_FIG_FOLDER = "output/long_term_uc/figures"
 
