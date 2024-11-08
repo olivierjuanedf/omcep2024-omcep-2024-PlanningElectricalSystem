@@ -11,5 +11,7 @@
               "wind_offshore", "wind_onshore"],
     "poland": null,
     "scandinavia": null
-  }
+  },
+  "uc_period_start": "1/1/1900",
+  "uc_period_end": "15/1/1900"
 }

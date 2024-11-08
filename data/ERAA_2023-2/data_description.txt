@@ -1,6 +1,6 @@
 About (raw) data
 * From https://www.entsoe.eu/outlooks/eraa/
-* Edition 2023.2
+* Edition 2023-2
 
 Dates
 * all data share same year (1900) given that fictive calendar considered in this data
@@ -8,7 +8,7 @@ Dates
 
 Units
 * powers in MW
-* capacity factors in % (of installed capacity)
+* capacity factors in %
 
 "Geographical" aggregation
 * raw data are generally provided at the scale of "market nodes" - typically with a few ones per country
