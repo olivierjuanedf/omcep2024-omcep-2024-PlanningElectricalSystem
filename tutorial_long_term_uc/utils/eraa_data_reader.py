@@ -144,7 +144,6 @@ def get_countries_data(uc_run_params: UCRunParams, agg_prod_types_with_cf_data: 
             current_df_gen_capa = pd.read_csv(gen_capa_data_file, sep=column_sep, decimal=decimal_sep)
             # Keep sanitize prod. types col values
             current_df_gen_capa[prod_type_col] = current_df_gen_capa[prod_type_col].apply(gen_capa_pt_str_sanitizer)
-            bob = 1
             # Keep only selected aggreg. prod. types
             current_df_gen_capa = \
                 set_aggreg_col_based_on_corresp(df=current_df_gen_capa, col_name=prod_type_col,

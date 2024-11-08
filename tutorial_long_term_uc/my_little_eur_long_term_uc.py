@@ -22,5 +22,5 @@ demand, agg_cf_data, agg_gen_capa_data = \
                      aggreg_prod_types_def=eraa_data_descr.aggreg_prod_types_def
                      )
 
-# generation_units_data = get_generation_units_data(agg_cf_data, agg_gen_capa_data)
+generation_units_data = get_generation_units_data(agg_cf_data, agg_gen_capa_data)
 print("THE END of European PyPSA-ERAA UC simulation")
