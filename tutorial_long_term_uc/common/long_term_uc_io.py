@@ -37,6 +37,7 @@ DT_FILE_PREFIX = DtFilePrefix()
 DT_SUBFOLDERS = DtSubfolders()
 FILES_FORMAT = FilesFormat()
 INPUT_ERAA_FOLDER = "data/ERAA_2023-2"
+INPUT_LT_UC_FOLDER = "input/long_term_uc"
 OUTPUT_DATA_FOLDER = "output/long_term_uc/data"
 OUTPUT_FIG_FOLDER = "output/long_term_uc/figures"
 

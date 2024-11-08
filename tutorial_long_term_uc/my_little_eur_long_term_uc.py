@@ -1,8 +1,20 @@
 """
 Read JSON parametrization files... and check coherence of them
 """
+import os
 
+from utils.read import check_and_load_json_file
+from common.long_term_uc_io import INPUT_LT_UC_FOLDER
 print("Read JSON parametrization files... and check that modifications are coherent with available ERAA data -> TBD")
+
+json_fixed_params_file = os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_fixed.json")
+json_params_tb_modif_file = os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_to-be-modif.json")
+
+json_params_fixed = check_and_load_json_file(json_file=json_fixed_params_file, 
+                                             file_descr="JSON fixed params")
+json_params_tb_modif = check_and_load_json_file(json_file=json_params_tb_modif_file,
+                                                file_descr="JSON params to be modif.")
+
 countries = ["italy", "france"]
 selected_prod_types = {"italy": ["nuclear", "solar_pv"], "france": ["oil", "wind_onshore"]}
 agg_prod_types_def = {

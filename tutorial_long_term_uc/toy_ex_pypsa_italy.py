@@ -92,7 +92,7 @@ print(f"Total cost at optimum: {network.objective:.2f}")
 
 from pathlib import Path
 import pypsa.optimization as opt
-from long_term_uc_io import OUTPUT_DATA_FOLDER
+from tutorial_long_term_uc.common.long_term_uc_io import OUTPUT_DATA_FOLDER
 m = opt.create_model(network)
 m.to_file(Path(f'{OUTPUT_DATA_FOLDER}/model_{country_trigram.lower()}.lp'))
 
@@ -109,7 +109,7 @@ plt.tight_layout()
 
 # And "stack" of optimized production profiles
 network.generators_t.p.div(1e3).plot.area(subplots=False, ylabel="GW")
-from long_term_uc_io import set_prod_figure, set_price_figure
+from tutorial_long_term_uc.common.long_term_uc_io import set_prod_figure, set_price_figure
 plt.savefig(set_prod_figure(country=country, year=year, start_horizon=start_horizon))
 plt.tight_layout()
 
