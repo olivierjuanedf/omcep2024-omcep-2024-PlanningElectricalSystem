@@ -6,6 +6,7 @@ from datetime import datetime
 from common.constants_datatypes import DATATYPE_NAMES
 from common.long_term_uc_io import INPUT_ERAA_FOLDER, DT_SUBFOLDERS, DT_FILE_PREFIX, COLUMN_NAMES, \
     FILES_FORMAT, DATE_FORMAT, GEN_CAPA_SUBDT_COLS
+from common.uc_run_params import UCRunParams
 from utils.basic_utils import str_sanitizer
 from utils.df_utils import cast_df_col_as_date, concatenate_dfs, selec_in_df_based_on_list, \
     set_aggreg_col_based_on_corresp, get_subdf_from_date_range
@@ -42,18 +43,21 @@ def gen_capa_pt_str_sanitizer(gen_capa_prod_type: str) -> str:
     return sanitized_gen_capa_pt
 
 
-def get_countries_data(countries: List[str], year: int, climatic_year: int, 
-                       selec_agg_prod_types: Dict[str, List[str]], agg_prod_types_with_cf_data: List[str],
-                       aggreg_prod_types_def: Dict[str, List[str]], period_start: datetime, 
-                       period_end: datetime) \
+def get_countries_data(uc_run_params: UCRunParams, agg_prod_types_with_cf_data: List[str],
+                       aggreg_prod_types_def: Dict[str, List[str]]) \
                         -> (Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]):
     """
-    :param countries: for which data must be read
-    :param year:
-    :param climatic_year:
-    :param selec_agg_prod_types: per country AGGREGATE
-    :param TBC
+    :param uc_run_params: UC run parameters, from which main reading infos will be obtained
+    :param agg_prod_types_with_cf_data: aggreg. production types for which CF data must be read
+    :param aggreg_prod_types_def: per-datatype definition of aggreg. to indiv. production types
     """
+    # set shorter names for simplicity
+    countries = uc_run_params.selected_countries
+    year = uc_run_params.selected_target_year
+    climatic_year = uc_run_params.selected_climatic_year
+    selec_agg_prod_types = uc_run_params.selected_agg_prod_types
+    period_start = uc_run_params.uc_period_start
+    period_end = uc_run_params.uc_period_end
     # get - per datatype - folder names
     demand_folder = os.path.join(INPUT_ERAA_FOLDER, DT_SUBFOLDERS.demand)
     res_cf_folder = os.path.join(INPUT_ERAA_FOLDER, DT_SUBFOLDERS.res_capa_factors)
