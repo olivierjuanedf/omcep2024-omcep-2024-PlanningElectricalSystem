@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 
 
@@ -40,6 +41,14 @@ INPUT_ERAA_FOLDER = "data/ERAA_2023-2"
 INPUT_LT_UC_FOLDER = "input/long_term_uc"
 OUTPUT_DATA_FOLDER = "output/long_term_uc/data"
 OUTPUT_FIG_FOLDER = "output/long_term_uc/figures"
+
+
+def set_json_fixed_params_file():
+    return os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_fixed.json")
+
+
+def set_json_params_tb_modif_file():
+    return os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_to-be-modif.json")
 
 
 def set_prod_figure(country: str, year: int, start_horizon: int) -> str:

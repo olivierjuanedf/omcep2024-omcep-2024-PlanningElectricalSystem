@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 from common.constants_datatypes import DATATYPE_NAMES
 from common.constants_temporal import DAY_OF_WEEK
-from tutorial_long_term_uc.common.long_term_uc_io import INPUT_ERAA_FOLDER, DT_SUBFOLDERS, DT_FILE_PREFIX, COLUMN_NAMES, \
+from common.long_term_uc_io import INPUT_ERAA_FOLDER, DT_SUBFOLDERS, DT_FILE_PREFIX, COLUMN_NAMES, \
     FILES_FORMAT, DATE_FORMAT, DATE_FORMAT_PRINT
 from utils.df_utils import cast_df_col_as_date, concatenate_dfs, selec_in_df_based_on_list, \
     set_aggreg_col_based_on_corresp, get_subdf_from_date_range

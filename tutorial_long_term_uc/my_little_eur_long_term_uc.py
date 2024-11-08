@@ -1,14 +1,13 @@
 """
 Read JSON parametrization files... and check coherence of them
 """
-import os
 
 from utils.read import check_and_load_json_file
-from common.long_term_uc_io import INPUT_LT_UC_FOLDER
+from common.long_term_uc_io import set_json_fixed_params_file, set_json_params_tb_modif_file
 print("Read JSON parametrization files... and check that modifications are coherent with available ERAA data -> TBD")
 
-json_fixed_params_file = os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_fixed.json")
-json_params_tb_modif_file = os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_to-be-modif.json")
+json_fixed_params_file = set_json_fixed_params_file()
+json_params_tb_modif_file = set_json_params_tb_modif_file()
 
 json_params_fixed = check_and_load_json_file(json_file=json_fixed_params_file, 
                                              file_descr="JSON fixed params")
