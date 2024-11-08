@@ -1,5 +1,5 @@
 {
-  "aggreg_prod_types": {
+  "aggreg_prod_types_def": {
     "batteries": ["batteries"], 
     "biofuel": ["biofuel"], 
     "coal": ["coal", "hard_coal", "lignite"],
