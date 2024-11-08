@@ -1,12 +1,11 @@
 import os
 from typing import Dict, List
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from common.constants_datatypes import DATATYPE_NAMES
-from common.constants_temporal import DAY_OF_WEEK
 from common.long_term_uc_io import INPUT_ERAA_FOLDER, DT_SUBFOLDERS, DT_FILE_PREFIX, COLUMN_NAMES, \
-    FILES_FORMAT, DATE_FORMAT, DATE_FORMAT_PRINT
+    FILES_FORMAT, DATE_FORMAT
 from utils.df_utils import cast_df_col_as_date, concatenate_dfs, selec_in_df_based_on_list, \
     set_aggreg_col_based_on_corresp, get_subdf_from_date_range
 
@@ -35,18 +34,16 @@ def set_aggreg_cf_prod_types_data(df_cf_list: List[pd.DataFrame], prod_type_col:
 
 
 def get_countries_data(countries: List[str], year: int, climatic_year: int, 
-                       selec_prod_types: Dict[str, List[str]], agg_prod_types_with_cf_data: List[str],
+                       selec_agg_prod_types: Dict[str, List[str]], agg_prod_types_with_cf_data: List[str],
                        aggreg_prod_types_def: Dict[str, List[str]], period_start: datetime, 
-                       period_end: datetime = None) -> (Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]):
-    # set default end of period if not provided
-    n_days_period_default = 9
-    if period_end is None:
-        period_end = period_start + timedelta(days=n_days_period_default)
-        print(f"End of period set to default value: {period_end:%Y/%m/%d} (period of {n_days_period_default} days)")
-    dow_start = DAY_OF_WEEK[period_start.isoweekday()]
-    dow_end = DAY_OF_WEEK[period_end.isoweekday()]
-    print(f"ERAA data for period [{dow_start} {period_start.strftime(DATE_FORMAT_PRINT)}, {dow_end} {period_end.strftime(DATE_FORMAT_PRINT)}]")
-
+                       period_end: datetime) -> (Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]):
+    """
+    :param countries: for which data must be read
+    :param year:
+    :param climatic_year:
+    :param selec_agg_prod_types: per country AGGREGATE
+    :param TBC
+    """
     # get - per datatype - folder names
     demand_folder = os.path.join(INPUT_ERAA_FOLDER, DT_SUBFOLDERS.demand)
     res_cf_folder = os.path.join(INPUT_ERAA_FOLDER, DT_SUBFOLDERS.res_capa_factors)
@@ -88,7 +85,7 @@ def get_countries_data(countries: List[str], year: int, climatic_year: int,
         # get RES capacity factor data
         print("Get RES capacity factors")
         agg_cf_data[country] = {}
-        for agg_prod_type in selec_prod_types[country]:
+        for agg_prod_type in selec_agg_prod_types[country]:
             # if prod type with CF data
             if agg_prod_type in agg_prod_types_with_cf_data:
                 print(n_spaces_msg * " " + f"- For aggreg. prod. type: {agg_prod_type}")

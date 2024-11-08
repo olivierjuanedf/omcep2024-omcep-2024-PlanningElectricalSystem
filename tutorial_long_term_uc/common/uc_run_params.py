@@ -110,4 +110,4 @@ class UCRunParams:
         if len(errors_list) > 0:
             uncoherent_param_stop(param_errors=errors_list)
         else:
-            print("Modified long-term UC parameters are coherent")
+            print("Modified long-term UC parameters are coherent!")

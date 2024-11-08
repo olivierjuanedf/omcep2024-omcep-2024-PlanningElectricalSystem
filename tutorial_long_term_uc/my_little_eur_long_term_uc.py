@@ -5,82 +5,26 @@ from utils.read import read_and_check_uc_run_params
 
 eraa_data_descr, uc_run_params = read_and_check_uc_run_params()
 
-selected_prod_types = {"italy": ["nuclear", "solar_pv"], "france": ["oil", "wind_onshore"]}
-agg_prod_types_def = {
-    "res_capa-factors": {
-      "solar_pv": [
-        "lfsolarpv"
-      ],
-      "solar_thermal": [
-        "csp_nostorage"
-      ],
-      "wind_offshore": [
-        "wind_offshore"
-      ],
-      "wind_onshore": [
-        "wind_onshore"
-      ]
-    },
-    "generation_capas": {
-      "batteries": [
-        "batteries"
-      ],
-      "biofuel": [
-        "biofuel"
-      ],
-      "coal": [
-        "coal",
-        "hard_coal",
-        "lignite"
-      ],
-      "dsr": [
-        "demand_side_response_capacity"
-      ],
-      "gas": [
-        "gas"
-      ],
-      "hydro": [
-        "hydro_pondage",
-        "hydro_pump_storage_closed_loop",
-        "hydro_pump_storage_open_loop",
-        "hydro_reservoir",
-        "hydro_run_of_river"
-      ],
-      "nuclear": [
-        "nuclear"
-      ],
-      "oil": [
-        "oil"
-      ],
-      "solar_pv": [
-        "solar_(photovoltaic)",
-        "lfsolarpv"
-      ],
-      "solar_thermal": [
-        "solar_(thermal)"
-      ],
-      "wind_offshore": [
-        "wind_offshore"
-      ],
-      "wind_onshore": [
-        "wind_onshore"
-      ]
-    }
-  }
-agg_pt_with_cf_data = ["solar_pv", "solar_thermal", "wind_offshore", "wind_onshore"]
-year = 2025  # select first ERAA year available, as an example 
-climatic_year = 1989  # and a given "climatic year" (to possibly test different climatic*weather conditions)
-from datetime import datetime
-uc_period_start = datetime(year=1900, month=1, day=1)
-
 """
-Get needed data
+Get needed data (demand, RES Capa. Factors, installed generation capacities)
 """
 from data_reader import get_countries_data
+from common.constants_temporal import DAY_OF_WEEK
+from common.long_term_uc_io import DATE_FORMAT_PRINT
 
-print("Read needed ERAA (2023.2) data")
-demand, agg_cf_data = get_countries_data(countries=countries, year=year, climatic_year=climatic_year,
-                                         selec_prod_types=selected_prod_types, agg_prod_types_with_cf_data=agg_pt_with_cf_data,
-                                         aggreg_prod_types_def=agg_prod_types_def, period_start=uc_period_start)
+period_start = uc_run_params.uc_period_start
+period_end = uc_run_params.uc_period_end
+dow_start = DAY_OF_WEEK[period_start.isoweekday()]
+dow_end = DAY_OF_WEEK[period_end.isoweekday()]
+uc_period_msg = f"[{dow_start} {period_start.strftime(DATE_FORMAT_PRINT)}, {dow_end} {period_end.strftime(DATE_FORMAT_PRINT)}]"
+
+print(f"Read needed ERAA ({eraa_data_descr.eraa_edition}) data for period {uc_period_msg}")
+demand, agg_cf_data = get_countries_data(countries=uc_run_params.selected_countries, 
+                                         year=uc_run_params.selected_target_year, 
+                                         climatic_year=uc_run_params.selected_climatic_year,
+                                         selec_agg_prod_types=uc_run_params.selected_agg_prod_types, 
+                                         agg_prod_types_with_cf_data=eraa_data_descr.agg_prod_types_with_cf_data,
+                                         aggreg_prod_types_def=eraa_data_descr.aggreg_prod_types_def, 
+                                         period_start=uc_run_params.uc_period_start, period_end=uc_run_params.uc_period_end)
 
 print("THE END of European PyPSA-ERAA UC simulation")
