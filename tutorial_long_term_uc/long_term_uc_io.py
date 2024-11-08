@@ -31,6 +31,8 @@ class FilesFormat:
 
 
 COLUMN_NAMES = ColumnNames()
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+DATE_FORMAT_PRINT = "%Y/%m/%d"
 DT_FILE_PREFIX = DtFilePrefix()
 DT_SUBFOLDERS = DtSubfolders()
 FILES_FORMAT = FilesFormat()

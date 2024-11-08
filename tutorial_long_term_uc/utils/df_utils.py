@@ -1,11 +1,18 @@
 import pandas as pd
 from typing import Dict, List
+from datetime import datetime
 
 from utils.basic_utils import get_key_of_val
 
 
+def cast_df_col_as_date(df: pd.DataFrame, date_col: str, date_format: str) -> pd.DataFrame:
+    df[date_col] = df[date_col].apply(lambda x: datetime.strptime(x, date_format))
+    return df
+
+
 def selec_in_df_based_on_list(df: pd.DataFrame, selec_col, selec_vals: list, rm_selec_col: bool = False) \
         -> pd.DataFrame:
+    pd.options.mode.chained_assignment = None
     selec_bool_col = f"is_selec_{selec_col}"
     df[selec_bool_col] = df[selec_col].apply(lambda x: 1 if x in selec_vals else 0)
     df_selec = df[df[selec_bool_col] == 1]

@@ -69,6 +69,8 @@ agg_prod_types_def = {
 agg_pt_with_cf_data = ["solar_pv", "solar_thermal", "wind_offshore", "wind_onshore"]
 year = 2025  # select first ERAA year available, as an example 
 climatic_year = 1989  # and a given "climatic year" (to possibly test different climatic*weather conditions)
+from datetime import datetime
+uc_period_start = datetime(year=1900, month=1, day=1)
 
 """
 Get needed data
@@ -78,4 +80,6 @@ from data_reader import get_countries_data
 print("Read needed ERAA (2023.2) data")
 demand, agg_cf_data = get_countries_data(countries=countries, year=year, climatic_year=climatic_year,
                                          selec_prod_types=selected_prod_types, agg_prod_types_with_cf_data=agg_pt_with_cf_data,
-                                         aggreg_prod_types_def=agg_prod_types_def)
+                                         aggreg_prod_types_def=agg_prod_types_def, period_start=uc_period_start)
+
+print("THE END of European PyPSA-ERAA UC simulation")
