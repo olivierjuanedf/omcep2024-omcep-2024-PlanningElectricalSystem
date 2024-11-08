@@ -64,8 +64,12 @@ def get_countries_data(countries: List[str], year: int, climatic_year: int,
 
     demand = {}
     agg_cf_data = {}
+    agg_gen_capa_data = {}
 
     n_spaces_msg = 2
+
+    aggreg_pt_cf_def = aggreg_prod_types_def[DATATYPE_NAMES.capa_factor]
+    aggreg_pt_capa_def = aggreg_prod_types_def[DATATYPE_NAMES.installed_capa]
 
     for country in countries:
         print(f"For country: {country}")
@@ -90,7 +94,6 @@ def get_countries_data(countries: List[str], year: int, climatic_year: int,
             if agg_prod_type in agg_prod_types_with_cf_data:
                 print(n_spaces_msg * " " + f"- For aggreg. prod. type: {agg_prod_type}")
                 current_df_res_cf_list = []
-                aggreg_pt_cf_def = aggreg_prod_types_def[DATATYPE_NAMES.capa_factor]
                 for prod_type in aggreg_pt_cf_def[agg_prod_type]:
                     cf_data_file = f"{res_cf_folder}/{res_cf_prefix}_{prod_type}_{current_suffix}.csv"
                     if os.path.exists(cf_data_file) is False:
@@ -117,5 +120,15 @@ def get_countries_data(countries: List[str], year: int, climatic_year: int,
                         set_aggreg_cf_prod_types_data(df_cf_list=current_df_res_cf_list, prod_type_col=prod_type_col,
                                                       pt_agg_col=prod_type_agg_col, val_col=value_col,
                                                       agg_prod_types_def=aggreg_pt_cf_def)
+        
+        # get installed generation capacity data
+        print("Get installed generation capacities (unique file per country and year, with all prod. types in it)")
+        agg_gen_capa_data[country] = {}
+        gen_capa_data_file = f"{gen_capas_folder}/{gen_capas_prefix}_{current_suffix}.csv"
+        if os.path.exists(gen_capa_data_file) is False:
+            print(f"[WARNING] Generation capas data file does not exist: {country} not accounted for here")
+        else:
+            current_df_gen_capa = pd.read_csv(gen_capa_data_file, sep=column_sep, decimal=decimal_sep) 
+
     return demand, agg_cf_data
     
