@@ -119,7 +119,7 @@
     2033
   ],
   "eraa_edition": "2023.2",
-  "eraa_unit_params_per_agg_pt": {
+  "pypsa_unit_params_per_agg_pt": {
     "batteries": {
       "p_min_pu": -1,
       "p_max_pu": 1
