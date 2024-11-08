@@ -30,10 +30,12 @@ def concatenate_dfs(dfs: List[pd.DataFrame], reset_index: bool = True) -> pd.Dat
     return df_concat
 
 
-def set_aggreg_col_based_on_corresp(df: pd.DataFrame, col_name: str, agg_col_name: str, val_col: str,
-                                    agg_corresp: Dict[str, List[str]], aggreg_ope) -> pd.DataFrame:
+def set_aggreg_col_based_on_corresp(df: pd.DataFrame, col_name: str, agg_col_name: str, val_cols: List[str],
+                                    agg_corresp: Dict[str, List[str]], common_aggreg_ope) -> pd.DataFrame:
     df[agg_col_name] = df[col_name].apply(get_key_of_val, args=(agg_corresp,)) 
-    df = df.groupby(agg_col_name).agg({agg_col_name: lambda x: x[0], val_col: aggreg_ope}).reset_index(drop=True)
+    agg_operations = {col: common_aggreg_ope for col in val_cols}
+    agg_operations[agg_col_name] = lambda x: x[0]
+    df = df.groupby(agg_col_name).agg(agg_operations).reset_index(drop=True)
     return df
 
 
