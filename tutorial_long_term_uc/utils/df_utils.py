@@ -34,8 +34,7 @@ def set_aggreg_col_based_on_corresp(df: pd.DataFrame, col_name: str, agg_col_nam
                                     agg_corresp: Dict[str, List[str]], common_aggreg_ope) -> pd.DataFrame:
     df[agg_col_name] = df[col_name].apply(get_key_of_val, args=(agg_corresp,)) 
     agg_operations = {col: common_aggreg_ope for col in val_cols}
-    agg_operations[agg_col_name] = lambda x: x[0]
-    df = df.groupby(agg_col_name).agg(agg_operations).reset_index(drop=True)
+    df = df.groupby(agg_col_name).agg(agg_operations).reset_index()
     return df
 
 

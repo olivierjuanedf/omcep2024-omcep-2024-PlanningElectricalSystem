@@ -12,7 +12,7 @@ def str_sanitizer(raw_str: Optional[str], replace_empty_char: bool = True,
         return raw_str
 
     sanitized_str = raw_str
-    raw_str = raw_str.strip()
+    sanitized_str = sanitized_str.strip()
     if replace_empty_char is True:
         sanitized_str = sanitized_str.replace(" ", "_")
     sanitized_str = sanitized_str.lower()
