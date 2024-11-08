@@ -12,7 +12,8 @@ In this tutorial, you will:
 
 ## The finite population model
 
-We recall te model.     We consider:
+We recall te model.    
+We consider:
 - $N$ EVs
 - A state space $S:=\{-1,0,1\}\times\{0,\Delta x,2\Delta x,\ldots,1\}$, where :
     - For any $(m,x)\in S$, $m$ represents the mode of charging ($-1$: discharging, $0$: idle, $1$: charging) and $x$ the State of Charge (SoC).
@@ -79,7 +80,7 @@ $$
     $$
 
 
-**You will find all the parameters of the model in the file** *model.py* 
+**You will find all the parameters of the model in the file** *mfc_params_fixed.py* 
 
 ## The General Frank Wolfe Algorithm
 
@@ -105,42 +106,20 @@ Evaluate the impact of the value of $c_4$ in :
 - the consumption signal tracking $r_t$
 - in the rate of convergence of the optimality gap of the GFW algorithm to $0$.
 
- You can modify $c_4$ in the file *model.py*.
-```python
-
-#Signal tracking penalization function
-c_4 = 5
-def phi(r,x):
-    return 0.5*c_4*(r - x)**2
-
-```
-
-**Warning** For $c_4$ too large, the numbers of space steps *n_x* and of time steps *n_t* are no more adapted. You can adapt it by taking *n_t* larger in the file *model.py*.
-
-```python
-#Choose the number n_x of discrete space steps and 
-n_x=10
-n_t= T*50    #we advice 50*T
+ You can modify $c_4$ in the file *mfc_params_to-be-modifs.py*.
 
 
-delta_t = T/n_t
-delta_x = 1/n_x
-ratio=(delta_t)/(delta_x)
-print(f'n_t = {n_t}, delta_t = {delta_t}, delta_x = {delta_x}, ratio = { ratio }')
-```
+**Warning** For $c_4$ too large, the numbers of space steps *n_x* and of time steps *n_t* are no more adapted. You can adapt it by taking *delta_t* smaller in the file *mfc_params_to-be-modifs.json*.
+
 
 ## Question 2
 
 The control *u* given by the function *gfw()* is implemented to a finite number of EVs using the function *build_trajectories_markov_chain()*. The associated consumption is compared with the target consumption with the function *plot_consumption()* and with the consumption associated with the mean field distribution with the function *plot_comparison_consumption()*.
 
 Evaluate the quality of the mean field approach with respect to the number of EVs to control.
-You can change the number of EVs to control in *main.py* by modifying the variable *n*.
-```python
-# n is the number of EVs to be controlled
-n = number_EV # variable number_EV is defined in model.py. 
-```
+You can change the number of EVs to control in *mfc_params_to-be-modifs.json* by modifying the variable *nb_EV_for_implementation*.
 
-To avoid running the algorithm each time, set the variable *run_gfw* to *False* at the beginning of *main.py*
+To avoid running the algorithm each time, set the variable *run_gfw* to 0 in *mfc_params_to-be-modifs.json*
 
 ## Question 3
 
@@ -162,18 +141,6 @@ def gen_init_distrib():
 
 ## Question 4
 
-Change the signal to follow (the variable $r_t$) in the file *model.py* by considering another .csv file 
+Change the signal to follow (the variable $r_t$) in the file *mfc_params_to-be-modifs.json* by considering another .csv file for the variable *file_conso_to_follow*.
 
-```python
-########################## For the mean field model ##########################
-
-signal_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','long-term_uc','data','aggreg_ev_france_charging_profiles_2030-1-7.csv')
-signal = data_reader.read_signal(v2g = v2g, file_path=signal_data_path) 
-```
-and correct the date of the beginning of the period correspondingly 
-
-```
-#Starting time of the optimization
-t_0 = datetime.datetime(year = 2030, month = 1, day = 7, hour = 7, minute = 0)
-```
 What can you observe ?

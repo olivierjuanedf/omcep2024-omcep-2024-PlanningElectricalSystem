@@ -2,23 +2,34 @@ import data_reader
 import numpy as np
 import pandas as pd
 import os
+import json
 import datetime
+
+### Read .json data ###
+
+file_input_data =  'mfc_params_to-be-modifs.json'
+path_input_data =  os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','input','mfc',file_input_data)
+# Open and read the JSON file
+with open(path_input_data, 'r') as file:
+    data = json.load(file)
+
 
 ########################## For the numerical scheme ##########################
 
 #Starting time of the optimization
-t_0 = datetime.datetime(year = 2030, month = 1, day = 7, hour = 7, minute = 0)
+t_0 = datetime.datetime.strptime(data["t_0"], '%d/%m/%Y %H:%M')
 
 #Time horizon 
-T = 6 #h
+T = data["T"] #h
 
 #Choose the number n_x of discrete space steps and 
 n_x=10
-n_t= T*50    #we advice 50*T
-
-
-delta_t = T/n_t
 delta_x = 1/n_x
+
+delta_t = data["delta_t"]
+n_t = int(T/delta_t)
+#n_t= T*50    #we advice 50*T
+
 ratio=(delta_t)/(delta_x)
 print(f'n_t = {n_t}, delta_t = {delta_t}, delta_x = {delta_x}, ratio = { ratio }')
 
@@ -34,7 +45,7 @@ i_x = list(range(n_x+1))
 
 I = [0,1] # choose the possible charging states
 v2g = True
-p_max =10 #kW, pmax of the plugg. Same value for V1G and V2G
+p_max = data["p_max"] #kW, pmax of the plugg. Same value for V1G and V2G
 
 if v2g: 
     I.append(-1) #we add the V2G mode
@@ -103,14 +114,14 @@ def c(k,i,l):
 #Define the terminal cost g:
 def g(i,s):
     s_p=s/n_x
-    c_1 = 10
-    c_2  = 0.7
+    c_1 = data["c_1"]
+    c_2  = data["c_2"]
     return c_1*max(0,c_2-s_p)**2
 
 
 #Define L to penalize high transitions values:
 
-c_3 = 100  #constant for affecting the transitions costs
+c_3 = data["c_3"]  #constant for affecting the transitions costs
 
 def L(x):
     if x==0: 
@@ -134,7 +145,7 @@ def H(x):
 ########################## For the mean field model ##########################
 
 signal_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','long_term_uc','data',
-                                 'aggreg_ev_france_charging_profiles_2030-1-7.csv')
+                                 data["file_conso_to_follow"])
 signal = data_reader.read_signal(v2g = v2g, file_path=signal_data_path) 
 #signal_dict gives the average consumption per EV !
 signal_dict = {t :signal[signal['time'] == t_0 + datetime.timedelta(hours=t)]['power'].iloc[0] / number_EV for t in range(T+2)}
@@ -154,11 +165,9 @@ def r(t):
     interpolation = previous_conso + (t-int(t))*(next_conso-previous_conso)
     return interpolation
 
-    
-
 
 #Signal tracking penalization function
-c_4 = 70
+c_4 = data["c_4"]
 def phi(r,x):
     return 0.5*c_4*(r - x)**2
 

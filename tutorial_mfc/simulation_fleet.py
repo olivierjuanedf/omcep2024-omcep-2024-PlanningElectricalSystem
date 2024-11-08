@@ -4,9 +4,18 @@ import matplotlib.pyplot as plt
 import os
 from model import *
 
+def print_progress_bar(iteration, total, length=50):
+    percent = ("{0:.1f}").format(100 * (iteration / float(total)))
+    filled_length = int(length * iteration // total)
+    bar = '█' * filled_length + '-' * (length - filled_length)
+    print(f'\rProgress: |{bar}| {percent}% Complete', end='\r')
+    if iteration == total:
+        print()
+
 
 def build_trajectories_markov_chain(nb: int, alpha: dict)-> (dict,dict) :
 
+    print("## Simulation of the N EVs Markov Chains : can take times for large number of EVs ## ")
     
     initial_state = {}
     proba_for_initial_state = {(i,l): m_0[i][l] for i in I for l in i_x}
@@ -38,6 +47,8 @@ def build_trajectories_markov_chain(nb: int, alpha: dict)-> (dict,dict) :
             mode = next_state[0]
             soc = next_state[1]
             empirical_distribution[mode][t][soc] +=1/nb
+        print_progress_bar(ev + 1, nb)
+
 
 
     return dict_trajectories,empirical_distribution
