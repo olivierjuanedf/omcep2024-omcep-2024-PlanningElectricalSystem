@@ -8,11 +8,11 @@ from simulation_fleet import *
 
 ######## Question 1 #######
 #### Influence of the parameters on the convergence of Frank Wolfe ######
-run_gfw = True
+run_gfw = data["run_gfw"]
 
 if run_gfw :
-    max_iteration = 5
-    acceleration = False 
+    max_iteration = data["max_iteration"]
+    acceleration = data["acceleration"] 
     if acceleration :
         (list_epsilon,rho,u)= gfw_accelerated(max_iteration )
     else :
@@ -35,7 +35,7 @@ if run_gfw :
 #### Question 2 ######
 
 # n is the number of EVs to be controlled
-n = number_EV # variable number_EV is defined in model.py. 
+n = data["nb_EV_for_implementation"] # variable number_EV is defined in model.py. 
 
 #We load the control and the distribution computed by the GFW algorithm
 u = load_control(t_0.strftime("%m_%d_%Y_%Hh%Mmin")+'_control.json')
