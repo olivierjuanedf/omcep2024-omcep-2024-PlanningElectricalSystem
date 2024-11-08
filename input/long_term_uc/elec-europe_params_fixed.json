@@ -1,5 +1,5 @@
 {
-  "aggreg_prod_types": {
+  "aggreg_prod_types_def": {
     "batteries": ["batteries"], 
     "biofuel": ["biofuel"], 
     "coal": ["coal", "hard_coal", "lignite"],
@@ -13,6 +13,7 @@
     "wind_offshore": ["wind_offshore"],
     "wind_onshore": ["wind_onshore"]
   },
+  "agg_prod_types_with_cf_data": ["solar_pv", "solar_thermal", "wind_offshore", "wind_onshore"],
   "available_climatic_years": [1982, 1989, 1996, 2003, 2010, 2016],
   "available_countries": ["benelux", "france", "germany", "iberian-peninsula", "italy", "poland", "scandinavia"],
   "available_aggreg_prod_types": ["batteries", "biofuel", "coal", "dsr", "gas", "hydro", "nuclear", "oil", 
