@@ -15,7 +15,7 @@ time_horizon_in_hours = 7 * 24  # number of - hourly - time-slots in considered 
 """
 Get needed data
 """
-from data_reader import get_countries_data
+from tutorial_long_term_uc.utils.eraa_data_reader import get_countries_data
 
 # here get data for all (meta-)countries (not only Italy)... just for test 
 demand, wind_on_shore, wind_off_shore, solar_pv = \

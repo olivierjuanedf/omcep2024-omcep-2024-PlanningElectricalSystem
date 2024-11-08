@@ -1,12 +1,12 @@
 import os
 from typing import Dict, List
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from common.constants_datatypes import DATATYPE_NAMES
-from common.constants_temporal import DAY_OF_WEEK
 from common.long_term_uc_io import INPUT_ERAA_FOLDER, DT_SUBFOLDERS, DT_FILE_PREFIX, COLUMN_NAMES, \
-    FILES_FORMAT, DATE_FORMAT, DATE_FORMAT_PRINT
+    FILES_FORMAT, DATE_FORMAT, GEN_CAPA_SUBDT_COLS
+from utils.basic_utils import str_sanitizer
 from utils.df_utils import cast_df_col_as_date, concatenate_dfs, selec_in_df_based_on_list, \
     set_aggreg_col_based_on_corresp, get_subdf_from_date_range
 
@@ -29,24 +29,31 @@ def set_aggreg_cf_prod_types_data(df_cf_list: List[pd.DataFrame], prod_type_col:
     # concatenate, aggreg. over prod type of same aggreg. type and avg
     df_cf_agg = concatenate_dfs(dfs=df_cf_list)
     df_cf_agg = set_aggreg_col_based_on_corresp(df=df_cf_agg, col_name=prod_type_col, agg_col_name=pt_agg_col, 
-                                                val_col=val_col, agg_corresp=agg_prod_types_def,
-                                                aggreg_ope="mean")
+                                                val_cols=[val_col], agg_corresp=agg_prod_types_def,
+                                                common_aggreg_ope="mean")
     return df_cf_agg
 
 
-def get_countries_data(countries: List[str], year: int, climatic_year: int, 
-                       selec_prod_types: Dict[str, List[str]], agg_prod_types_with_cf_data: List[str],
-                       aggreg_prod_types_def: Dict[str, List[str]], period_start: datetime, 
-                       period_end: datetime = None) -> (Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]):
-    # set default end of period if not provided
-    n_days_period_default = 9
-    if period_end is None:
-        period_end = period_start + timedelta(days=n_days_period_default)
-        print(f"End of period set to default value: {period_end:%Y/%m/%d} (period of {n_days_period_default} days)")
-    dow_start = DAY_OF_WEEK[period_start.isoweekday()]
-    dow_end = DAY_OF_WEEK[period_end.isoweekday()]
-    print(f"ERAA data for period [{dow_start} {period_start.strftime(DATE_FORMAT_PRINT)}, {dow_end} {period_end.strftime(DATE_FORMAT_PRINT)}]")
+def gen_capa_pt_str_sanitizer(gen_capa_prod_type: str) -> str:
+    # very ad-hoc operation
+    sanitized_gen_capa_pt = gen_capa_prod_type.replace(" - ", " ")
+    sanitized_gen_capa_pt = str_sanitizer(raw_str=sanitized_gen_capa_pt, 
+                                          ad_hoc_replacements={"gas_": "gas", "(": "", ")": ""})
+    return sanitized_gen_capa_pt
 
+
+def get_countries_data(countries: List[str], year: int, climatic_year: int, 
+                       selec_agg_prod_types: Dict[str, List[str]], agg_prod_types_with_cf_data: List[str],
+                       aggreg_prod_types_def: Dict[str, List[str]], period_start: datetime, 
+                       period_end: datetime) \
+                        -> (Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]):
+    """
+    :param countries: for which data must be read
+    :param year:
+    :param climatic_year:
+    :param selec_agg_prod_types: per country AGGREGATE
+    :param TBC
+    """
     # get - per datatype - folder names
     demand_folder = os.path.join(INPUT_ERAA_FOLDER, DT_SUBFOLDERS.demand)
     res_cf_folder = os.path.join(INPUT_ERAA_FOLDER, DT_SUBFOLDERS.res_capa_factors)
@@ -67,8 +74,12 @@ def get_countries_data(countries: List[str], year: int, climatic_year: int,
 
     demand = {}
     agg_cf_data = {}
+    agg_gen_capa_data = {}
 
     n_spaces_msg = 2
+
+    aggreg_pt_cf_def = aggreg_prod_types_def[DATATYPE_NAMES.capa_factor]
+    aggreg_pt_gen_capa_def = aggreg_prod_types_def[DATATYPE_NAMES.installed_capa]
 
     for country in countries:
         print(f"For country: {country}")
@@ -88,12 +99,11 @@ def get_countries_data(countries: List[str], year: int, climatic_year: int,
         # get RES capacity factor data
         print("Get RES capacity factors")
         agg_cf_data[country] = {}
-        for agg_prod_type in selec_prod_types[country]:
+        for agg_prod_type in selec_agg_prod_types[country]:
             # if prod type with CF data
             if agg_prod_type in agg_prod_types_with_cf_data:
                 print(n_spaces_msg * " " + f"- For aggreg. prod. type: {agg_prod_type}")
                 current_df_res_cf_list = []
-                aggreg_pt_cf_def = aggreg_prod_types_def[DATATYPE_NAMES.capa_factor]
                 for prod_type in aggreg_pt_cf_def[agg_prod_type]:
                     cf_data_file = f"{res_cf_folder}/{res_cf_prefix}_{prod_type}_{current_suffix}.csv"
                     if os.path.exists(cf_data_file) is False:
@@ -120,5 +130,26 @@ def get_countries_data(countries: List[str], year: int, climatic_year: int,
                         set_aggreg_cf_prod_types_data(df_cf_list=current_df_res_cf_list, prod_type_col=prod_type_col,
                                                       pt_agg_col=prod_type_agg_col, val_col=value_col,
                                                       agg_prod_types_def=aggreg_pt_cf_def)
-    return demand, agg_cf_data
+        
+        # get installed generation capacity data
+        print("Get installed generation capacities (unique file per country and year, with all prod. types in it)")
+        gen_capa_data_file = f"{gen_capas_folder}/{gen_capas_prefix}_{current_suffix}.csv"
+        if os.path.exists(gen_capa_data_file) is False:
+            print(f"[WARNING] Generation capas data file does not exist: {country} not accounted for here")
+        else:
+            current_df_gen_capa = pd.read_csv(gen_capa_data_file, sep=column_sep, decimal=decimal_sep)
+            # Keep sanitize prod. types col values
+            current_df_gen_capa[prod_type_col] = current_df_gen_capa[prod_type_col].apply(gen_capa_pt_str_sanitizer)
+            bob = 1
+            # Keep only selected aggreg. prod. types
+            current_df_gen_capa = \
+                set_aggreg_col_based_on_corresp(df=current_df_gen_capa, col_name=prod_type_col,
+                                                agg_col_name=prod_type_agg_col, val_cols=GEN_CAPA_SUBDT_COLS, 
+                                                agg_corresp=aggreg_pt_gen_capa_def, common_aggreg_ope="sum")
+            current_df_gen_capa = \
+                selec_in_df_based_on_list(df=current_df_gen_capa, selec_col=prod_type_agg_col,
+                                          selec_vals=selec_agg_prod_types[country], rm_selec_col=True)
+            agg_gen_capa_data[country] = current_df_gen_capa
+
+    return demand, agg_cf_data, agg_gen_capa_data
     

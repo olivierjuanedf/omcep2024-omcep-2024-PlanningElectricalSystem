@@ -38,6 +38,8 @@ DATE_FORMAT_PRINT = "%Y/%m/%d"
 DT_FILE_PREFIX = DtFilePrefix()
 DT_SUBFOLDERS = DtSubfolders()
 FILES_FORMAT = FilesFormat()
+GEN_CAPA_SUBDT_COLS = ["power_capacity", "power_capacity_turbine", "power_capacity_pumping", 
+                       "power_capacity_injection", "power_capacity_offtake",]
 INPUT_ERAA_FOLDER = "data/ERAA_2023-2"
 INPUT_LT_UC_FOLDER = "input/long_term_uc"
 # first date in ERAA data (fictive 364 days calendar)

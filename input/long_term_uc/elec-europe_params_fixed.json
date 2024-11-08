@@ -45,12 +45,15 @@
       "oil": [
         "oil"
       ],
+      "others_fatal": [
+        "others_non-renewable",
+        "others_renewable"
+      ],
       "solar_pv": [
-        "solar_(photovoltaic)",
-        "lfsolarpv"
+        "solar_photovoltaic"
       ],
       "solar_thermal": [
-        "solar_(thermal)"
+        "solar_thermal"
       ],
       "wind_offshore": [
         "wind_offshore"
@@ -150,6 +153,7 @@
     "hydro": "blue",
     "nuclear": "olive",
     "oil": "black",
+    "others_fatal": "green",
     "solar_pv": "yellow",
     "solar_thermal": "orange",
     "wind_offshore": "magenta",

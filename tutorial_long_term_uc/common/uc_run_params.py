@@ -5,6 +5,7 @@ from typing import Dict, List, Optional, Union
 
 from common.constants_extract_eraa_data import ERAADatasetDescr
 from common.long_term_uc_io import MIN_DATE_IN_DATA, MAX_DATE_IN_DATA
+from utils.basic_utils import get_period_str
 
 
 DATE_FORMAT = "%Y/%m/%d"
@@ -35,6 +36,15 @@ class UCRunParams:
     uc_period_start: Union[str, datetime]
     uc_period_end: Union[str, datetime] = None
 
+    def __repr__(self):
+        repr_str = "UC long-term model run with params:"
+        n_countries = len(self.selected_countries)
+        repr_str += f"\n- {n_countries} country(ies): {self.selected_countries}"
+        period_str = get_period_str(period_start=self.uc_period_start, period_end=self.uc_period_end)
+        repr_str += f"\n- year: {self.selected_target_year}, on period {period_str}"
+        repr_str += f"\n- climatic year: {self.selected_climatic_year}"
+        return repr_str
+
     def process(self, available_countries: List[str]):
         # if dates in str format, cast them as datetime 
         # - setting end of period to default value if not provided
@@ -62,7 +72,7 @@ class UCRunParams:
         # for selected countries
         unknown_countries = list(countries_set - set(eraa_data_descr.available_countries))
         if len(unknown_countries) > 0:
-            errors_list.append(f"Unknown selected countrie(s): {unknown_countries}")
+            errors_list.append(f"Unknown selected country(ies): {unknown_countries}")
 
         # for selected target and climatic years
         # check that unique value provided
@@ -110,4 +120,5 @@ class UCRunParams:
         if len(errors_list) > 0:
             uncoherent_param_stop(param_errors=errors_list)
         else:
-            print("Modified long-term UC parameters are coherent")
+            print("Modified LONG-TERM UC PARAMETERS ARE COHERENT!")
+            print(f"RUN CAN START with parameters: {str(self)}")
