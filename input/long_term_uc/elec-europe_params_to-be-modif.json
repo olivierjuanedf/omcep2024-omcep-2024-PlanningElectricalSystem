@@ -7,7 +7,7 @@
     "france": null,
     "germany": null,
     "iberian-peninsula": null,
-    "italy": ["coal", "gas", "hydro", "nuclear", "oil", "solar_pv", "solar_thermal", 
+    "italy": ["coal", "gas", "hydro_reservoir", "nuclear", "oil", "solar_pv", "solar_thermal", 
               "wind_offshore", "wind_onshore"],
     "poland": null,
     "scandinavia": null

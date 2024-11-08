@@ -43,7 +43,6 @@
       ],
       "hydro_reservoir": [
         "hydro_reservoir"
-      ]
       ],
       "hydro_run_of_river": [
         "hydro_run_of_river"
@@ -119,116 +118,6 @@
     2033
   ],
   "eraa_edition": "2023.2",
-  "pypsa_unit_params_per_agg_pt": {
-    "batteries": {
-      "p_min_pu": -1,
-      "p_max_pu": 1
-    },
-    "biofuel": {
-      "p_min_pu": 0,
-      "p_max_pu": 1,
-      "marginal_cost": 0,
-      "efficiency": 1,
-      "committable": False
-    },
-    "coal": {
-      "p_min_pu": 0,
-      "p_max_pu": 1,
-      "committable": False
-    },
-    "dsr": {
-      "max_hours": 3,
-      "cyclic_state_of_charge": True
-    },
-    "gas": {
-      "p_min_pu": 0,
-      "p_max_pu": 1,
-      "efficiency": 0.5,
-      "committable": False
-    },
-    "hydro_pondage": {},
-    "hydro_pump_storage_closed_loop": {
-      "p_min_pu": -1.02236,
-      "p_max_pu": 1,
-      "cyclic_state_of_charge": False,
-      "marginal_cost": 0.1,
-      "committable": False
-    },
-    "hydro_pump_storage_open_loop": {
-      "p_min_pu": -0.86796,
-      "p_max_pu": 1,
-      "cyclic_state_of_charge": False,
-      "marginal_cost": 0.1,
-      "committable": False
-    },
-    "hydro_reservoir": {
-      "p_min_pu": 0,
-      "p_max_pu": 1,
-      "committable": False
-    },
-    "hydro_run_of_river": {
-      "carrier": "hydro",
-      "p_min_pu": 1,
-      "p_max_pu": 1,
-      "efficiency": 1,
-      "committable": False
-    },
-    "nuclear": {
-      "p_min_pu": 0.25,
-      "p_max_pu": 1,
-      "efficiency": 0.33,
-      "marginal_cost": 9,
-      "committable": False
-    },
-    "oil": {
-      "p_min_pu": 0,
-      "p_max_pu": 1,
-      "committable": False
-    },
-    "others_fatal": {
-      "p_min_pu": 1,
-      "p_max_pu": 1,
-      "efficiency": 0.4,
-      "committable": False
-    },
-    "solar_pv": {
-      "carrier": "solar",
-      "p_min_pu": 0,
-      "efficiency": 1,
-      "committable": False
-    },
-    "solar_thermal": {
-      "carrier": "solar",
-      "p_min_pu": 0,
-      "efficiency": 1,
-      "committable": False
-    },
-    "wind_offshore": {
-      "carrier": "wind",
-      "p_min_pu": 0,
-      "efficiency": 1,
-      "committable": False
-    },
-    "wind_onshore": {
-      "carrier": "wind",
-      "p_min_pu": 0,
-      "efficiency": 1,
-      "committable": False
-    }
-  },
-  "unit_complem_params_per_agg_pt": {
-    "batteries": {
-      "init_soc_pu": "from_json_tb_modif"
-    },
-    "hydro_pump_storage_closed_loop": {
-      "power_capa": "from_eraa_data",
-      "energy_capa": "from_eraa_data",
-      "init_soc_pu": "from_json_tb_modif"
-    },
-    "hydro_pump_storage_open_loop": {
-      "init_soc_pu": "from_json_tb_modif"
-    }
-  },
   "gps_coordinates": {
     "benelux": [
       4.4901,
@@ -286,5 +175,133 @@
     "solar_thermal": "orange",
     "wind_offshore": "magenta",
     "wind_onshore": "purple"
+  },
+  "pypsa_unit_params_per_agg_pt": {
+    "batteries": {
+      "p_min_pu": -1,
+      "p_max_pu": 1
+    },
+    "biofuel": {
+      "carrier": "biofuel",
+      "p_min_pu": 0,
+      "p_max_pu": 1,
+      "marginal_cost": 0,
+      "efficiency": 1,
+      "committable": "false"
+    },
+    "coal": {
+      "p_min_pu": 0,
+      "p_max_pu": 1,
+      "committable": "false"
+    },
+    "dsr": {
+      "max_hours": 3,
+      "cyclic_state_of_charge": "true"
+    },
+    "gas": {
+      "p_min_pu": 0,
+      "p_max_pu": 1,
+      "efficiency": 0.5,
+      "committable": "true"
+    },
+    "hydro_pondage": {
+      "carrier": "hydro",
+      "p_min_pu": 0,
+      "p_max_pu": 1,
+      "marginal_cost": 0.1,
+      "committable": "false"
+    },
+    "hydro_pump_storage_closed_loop": {
+      "carrier": "hydro",
+      "p_min_pu": -1.02236,
+      "p_max_pu": 1,
+      "cyclic_state_of_charge": "false",
+      "marginal_cost": 0.1,
+      "committable": "false"
+    },
+    "hydro_pump_storage_open_loop": {
+      "carrier": "hydro",
+      "p_min_pu": -0.86796,
+      "p_max_pu": 1,
+      "cyclic_state_of_charge": "false",
+      "marginal_cost": 0.1,
+      "committable": "false"
+    },
+    "hydro_reservoir": {
+      "carrier": "hydro",
+      "p_min_pu": 0,
+      "p_max_pu": 1,
+      "committable": "false"
+    },
+    "hydro_run_of_river": {
+      "carrier": "hydro",
+      "p_min_pu": 1,
+      "p_max_pu": 1,
+      "efficiency": 1,
+      "committable": "false"
+    },
+    "nuclear": {
+      "carrier": "nuclear",
+      "p_min_pu": 0.25,
+      "p_max_pu": 1,
+      "efficiency": 0.33,
+      "marginal_cost": 9,
+      "committable": "false"
+    },
+    "oil": {
+      "carrier": "oil",
+      "p_min_pu": 0,
+      "p_max_pu": 1,
+      "committable": "false"
+    },
+    "others_fatal": {
+      "carrier": "other_renew",
+      "p_min_pu": 1,
+      "p_max_pu": 1,
+      "efficiency": 0.4,
+      "committable": "false"
+    },
+    "solar_pv": {
+      "carrier": "solar",
+      "p_min_pu": 0,
+      "efficiency": 1,
+      "committable": "false"
+    },
+    "solar_thermal": {
+      "carrier": "solar",
+      "p_min_pu": 0,
+      "efficiency": 1,
+      "committable": "false"
+    },
+    "wind_offshore": {
+      "carrier": "wind",
+      "p_min_pu": 0,
+      "efficiency": 1,
+      "committable": "false"
+    },
+    "wind_onshore": {
+      "carrier": "wind",
+      "p_min_pu": 0,
+      "efficiency": 1,
+      "committable": "false"
+    }
+  },
+  "units_complem_params_per_agg_pt": {
+    "batteries": {
+      "power_capa": "from_eraa_data",
+      "init_soc_pu": "from_json_tb_modif"
+    },
+    "hydro_pump_storage_closed_loop": {
+      "power_capa": "from_eraa_data",
+      "energy_capa": "from_eraa_data",
+      "init_soc_pu": "from_json_tb_modif"
+    },
+    "hydro_pump_storage_open_loop": {
+      "power_capa": "from_eraa_data",
+      "init_soc_pu": "from_json_tb_modif"
+    },
+    "solar_pv": {
+      "capa_factors": "from_eraa_data"
+    }
   }
 }

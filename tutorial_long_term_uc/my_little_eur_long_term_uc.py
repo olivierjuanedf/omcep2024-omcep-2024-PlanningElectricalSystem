@@ -22,5 +22,10 @@ demand, agg_cf_data, agg_gen_capa_data = \
                      aggreg_prod_types_def=eraa_data_descr.aggreg_prod_types_def
                      )
 
-generation_units_data = get_generation_units_data(agg_cf_data, agg_gen_capa_data)
+from include.dataset_builder import get_generation_units_data
+print("Get generation units data, from both ERAA data - read just before - and JSON parameter file")
+generation_units_data = \
+  get_generation_units_data(pypsa_unit_params_per_agg_pt=eraa_data_descr.pypsa_unit_params_per_agg_pt,
+                            units_complem_params_per_agg_pt=eraa_data_descr.units_complem_params_per_agg_pt, 
+                            agg_res_cf_data=agg_cf_data, agg_gen_capa_data=agg_gen_capa_data)
 print("THE END of European PyPSA-ERAA UC simulation")

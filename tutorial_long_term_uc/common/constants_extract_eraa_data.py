@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Union
 
+from utils.basic_utils import is_str_bool
+
 
 @dataclass
 class ERAADatasetDescr:
@@ -16,4 +18,13 @@ class ERAADatasetDescr:
     gps_coordinates: Union[Dict[str, List[float]], Dict[str, Tuple[float, float]]]
     per_zone_color: Dict[str, str]
     per_agg_prod_type_color: Dict[str, str]
-    
+    pypsa_unit_params_per_agg_pt: Dict[str, dict]  # dict of per aggreg. prod type main Pypsa params
+    # for each aggreg. prod type, a dict. {complem. param name: source - "from_json_tb_modif"/"from_eraa_data"}
+    units_complem_params_per_agg_pt: Dict[str, Dict[str, str]]
+
+    def process(self):
+        for agg_pt, pypsa_params in self.pypsa_unit_params_per_agg_pt.items():
+            for param_name, param_val in pypsa_params.items():
+                if is_str_bool(bool_str=param_val) is True:
+                    self.pypsa_unit_params_per_agg_pt[agg_pt][param_name] = bool(param_val)
+                                 

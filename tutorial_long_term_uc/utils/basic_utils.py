@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Union
 
 from common.constants_temporal import DAY_OF_WEEK
 from common.long_term_uc_io import DATE_FORMAT_PRINT
@@ -48,3 +48,17 @@ def get_period_str(period_start: datetime, period_end: datetime):
     period_start_str = f"{dow_start} {period_start.strftime(DATE_FORMAT_PRINT)}"
     period_end_str = f"{dow_end} {period_end.strftime(DATE_FORMAT_PRINT)}"
     return f"[{period_start_str}, {period_end_str}]"
+
+
+def is_str_bool(bool_str: Optional[str]) -> bool:
+    if isinstance(bool_str, str) is False:
+        return False
+    return bool_str.lower() in ["true", "false"]
+
+
+def cast_str_bool(bool_str: str) -> Union[str, bool]:
+    if is_str_bool(bool_str=bool_str) is True:
+        return bool(bool_str)
+    else:
+        return bool_str
+    

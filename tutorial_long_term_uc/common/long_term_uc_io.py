@@ -32,7 +32,14 @@ class FilesFormat:
     decimal_sep: str = "."
 
 
+@dataclass
+class ComplemDataSources:
+    from_json_tb_modif: str = "from_json_tb_modif"
+    from_eraa_data: str = "from_eraa_data"
+
+
 COLUMN_NAMES = ColumnNames()
+COMPLEM_DATA_SOURCES = ComplemDataSources()
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 DATE_FORMAT_PRINT = "%Y/%m/%d"
 DT_FILE_PREFIX = DtFilePrefix()
