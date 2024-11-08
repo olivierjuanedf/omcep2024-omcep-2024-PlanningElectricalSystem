@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from typing import Dict, List
 
 from utils.basic_utils import get_key_of_val
@@ -24,11 +23,16 @@ def concatenate_dfs(dfs: List[pd.DataFrame], reset_index: bool = True) -> pd.Dat
     return df_concat
 
 
-def set_aggreg_col_based_on_corresp(df: pd.DataFrame, agg_col_name: str, val_col: str,
+def set_aggreg_col_based_on_corresp(df: pd.DataFrame, col_name: str, agg_col_name: str, val_col: str,
                                     agg_corresp: Dict[str, List[str]], aggreg_ope) -> pd.DataFrame:
-    df[agg_col_name] = df.apply(get_key_of_val, args=(agg_corresp,)) 
-    df = df.groupby(agg_col_name).agg({val_col: aggreg_ope}).reset_index(drop=True)
-    all_cols = list(df.columns)
-    all_cols.remove(agg_col_name)
-    df = df[all_cols]
+    df[agg_col_name] = df[col_name].apply(get_key_of_val, args=(agg_corresp,)) 
+    df = df.groupby(agg_col_name).agg({agg_col_name: lambda x: x[0], val_col: aggreg_ope}).reset_index(drop=True)
     return df
+
+
+def get_subdf_from_date_range(df: pd.DataFrame, date_col: str, date_min: datetime, date_max: datetime) -> pd.DataFrame:
+    """
+    Get values in a dataframe from a date range
+    """
+    df_range = df[(date_min <= df[date_col]) & (df[date_col] < date_max)]
+    return df_range

@@ -1,33 +1,136 @@
 {
   "aggreg_prod_types_def": {
-    "batteries": ["batteries"], 
-    "biofuel": ["biofuel"], 
-    "coal": ["coal", "hard_coal", "lignite"],
-    "dsr": ["demand_side_response_capacity"], "gas": ["gas"],
-    "hydro": ["hydro_pondage", "hydro_pump_storage_closed_loop", "hydro_pump_storage_open_loop",
-              "hydro_reservoir", "hydro_run_of_river"], 
-    "nuclear": ["nuclear"], 
-    "oil": ["oil"],
-    "solar_pv": ["solar_(photovoltaic)"], 
-    "solar_thermal": ["solar_(thermal)"],
-    "wind_offshore": ["wind_offshore"],
-    "wind_onshore": ["wind_onshore"]
+    "res_capa-factors": {
+      "solar_pv": [
+        "lfsolarpv"
+      ],
+      "solar_thermal": [
+        "csp_nostorage"
+      ],
+      "wind_offshore": [
+        "wind_offshore"
+      ],
+      "wind_onshore": [
+        "wind_onshore"
+      ]
+    },
+    "generation_capas": {
+      "batteries": [
+        "batteries"
+      ],
+      "biofuel": [
+        "biofuel"
+      ],
+      "coal": [
+        "coal",
+        "hard_coal",
+        "lignite"
+      ],
+      "dsr": [
+        "demand_side_response_capacity"
+      ],
+      "gas": [
+        "gas"
+      ],
+      "hydro": [
+        "hydro_pondage",
+        "hydro_pump_storage_closed_loop",
+        "hydro_pump_storage_open_loop",
+        "hydro_reservoir",
+        "hydro_run_of_river"
+      ],
+      "nuclear": [
+        "nuclear"
+      ],
+      "oil": [
+        "oil"
+      ],
+      "solar_pv": [
+        "solar_(photovoltaic)",
+        "lfsolarpv"
+      ],
+      "solar_thermal": [
+        "solar_(thermal)"
+      ],
+      "wind_offshore": [
+        "wind_offshore"
+      ],
+      "wind_onshore": [
+        "wind_onshore"
+      ]
+    }
   },
-  "agg_prod_types_with_cf_data": ["solar_pv", "solar_thermal", "wind_offshore", "wind_onshore"],
-  "available_climatic_years": [1982, 1989, 1996, 2003, 2010, 2016],
-  "available_countries": ["benelux", "france", "germany", "iberian-peninsula", "italy", "poland", "scandinavia"],
-  "available_aggreg_prod_types": ["batteries", "biofuel", "coal", "dsr", "gas", "hydro", "nuclear", "oil", 
-                                  "solar_pv", "solar_thermal", "wind_offshore", "wind_onshore"],
-  "available_target_years": [2025, 2033],
+  "agg_prod_types_with_cf_data": [
+    "solar_pv",
+    "solar_thermal",
+    "wind_offshore",
+    "wind_onshore"
+  ],
+  "available_climatic_years": [
+    1982,
+    1989,
+    1996,
+    2003,
+    2010,
+    2016
+  ],
+  "available_countries": [
+    "benelux",
+    "france",
+    "germany",
+    "iberian-peninsula",
+    "italy",
+    "poland",
+    "scandinavia"
+  ],
+  "available_aggreg_prod_types": [
+    "batteries",
+    "biofuel",
+    "coal",
+    "dsr",
+    "gas",
+    "hydro",
+    "nuclear",
+    "oil",
+    "solar_pv",
+    "solar_thermal",
+    "wind_offshore",
+    "wind_onshore"
+  ],
+  "available_target_years": [
+    2025,
+    2033
+  ],
   "eraa_edition": "2023.2",
   "gps_coordinates": {
-    "benelux": [4.4901, 51.9236],
-    "france": [2.3594, 48.8551],
-    "germany": [13.4137, 52.5181],
-    "iberian-peninsula": [-3.4166, 40.4054],
-    "italy": [12.4804, 41.8941],
-    "poland": [20.9954, 52.2309],
-    "scandinavia": [18.0461, 59.3306]
+    "benelux": [
+      4.4901,
+      51.9236
+    ],
+    "france": [
+      2.3594,
+      48.8551
+    ],
+    "germany": [
+      13.4137,
+      52.5181
+    ],
+    "iberian-peninsula": [
+      -3.4166,
+      40.4054
+    ],
+    "italy": [
+      12.4804,
+      41.8941
+    ],
+    "poland": [
+      20.9954,
+      52.2309
+    ],
+    "scandinavia": [
+      18.0461,
+      59.3306
+    ]
   },
   "per_zone_color": {
     "benelux": "brown",

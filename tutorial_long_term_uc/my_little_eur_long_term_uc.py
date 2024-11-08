@@ -6,17 +6,65 @@ print("Read JSON parametrization files... and check that modifications are coher
 countries = ["italy", "france"]
 selected_prod_types = {"italy": ["nuclear", "solar_pv"], "france": ["oil", "wind_onshore"]}
 agg_prod_types_def = {
-    "batteries": ["batteries"], "biofuel": ["biofuel"], 
-    "coal": ["coal", "hard_coal", "lignite"],
-    "dsr": ["demand_side_response_capacity"], "gas": ["gas"],
-    "hydro": ["hydro_pondage", "hydro_pump_storage_closed_loop", "hydro_pump_storage_open_loop",
-              "hydro_reservoir", "hydro_run_of_river"], 
-    "nuclear": ["nuclear"], 
-    "oil": ["oil"],
-    "solar_pv": ["solar_(photovoltaic)"], 
-    "solar_thermal": ["solar_(thermal)"],
-    "wind_offshore": ["wind_offshore"],
-    "wind_onshore": ["wind_onshore"]
+    "res_capa-factors": {
+      "solar_pv": [
+        "lfsolarpv"
+      ],
+      "solar_thermal": [
+        "csp_nostorage"
+      ],
+      "wind_offshore": [
+        "wind_offshore"
+      ],
+      "wind_onshore": [
+        "wind_onshore"
+      ]
+    },
+    "generation_capas": {
+      "batteries": [
+        "batteries"
+      ],
+      "biofuel": [
+        "biofuel"
+      ],
+      "coal": [
+        "coal",
+        "hard_coal",
+        "lignite"
+      ],
+      "dsr": [
+        "demand_side_response_capacity"
+      ],
+      "gas": [
+        "gas"
+      ],
+      "hydro": [
+        "hydro_pondage",
+        "hydro_pump_storage_closed_loop",
+        "hydro_pump_storage_open_loop",
+        "hydro_reservoir",
+        "hydro_run_of_river"
+      ],
+      "nuclear": [
+        "nuclear"
+      ],
+      "oil": [
+        "oil"
+      ],
+      "solar_pv": [
+        "solar_(photovoltaic)",
+        "lfsolarpv"
+      ],
+      "solar_thermal": [
+        "solar_(thermal)"
+      ],
+      "wind_offshore": [
+        "wind_offshore"
+      ],
+      "wind_onshore": [
+        "wind_onshore"
+      ]
+    }
   }
 agg_pt_with_cf_data = ["solar_pv", "solar_thermal", "wind_offshore", "wind_onshore"]
 year = 2025  # select first ERAA year available, as an example 
