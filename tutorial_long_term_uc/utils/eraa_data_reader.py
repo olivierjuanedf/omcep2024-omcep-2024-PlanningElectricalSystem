@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime
 
 from common.constants_datatypes import DATATYPE_NAMES
+from common.error_msgs import print_out_msg
 from common.long_term_uc_io import INPUT_ERAA_FOLDER, DT_SUBFOLDERS, DT_FILE_PREFIX, COLUMN_NAMES, \
     FILES_FORMAT, DATE_FORMAT, GEN_CAPA_SUBDT_COLS
 from common.uc_run_params import UCRunParams
@@ -138,7 +139,7 @@ def get_countries_data(uc_run_params: UCRunParams, agg_prod_types_with_cf_data: 
         print("Get installed generation capacities (unique file per country and year, with all prod. types in it)")
         gen_capa_data_file = f"{gen_capas_folder}/{gen_capas_prefix}_{current_suffix}.csv"
         if os.path.exists(gen_capa_data_file) is False:
-            print(f"[WARNING] Generation capas data file does not exist: {country} not accounted for here")
+            print_out_msg(msg_level="warning", msg=f"Generation capas data file does not exist: {country} not accounted for here")
         else:
             current_df_gen_capa = pd.read_csv(gen_capa_data_file, sep=column_sep, decimal=decimal_sep)
             # Keep sanitize prod. types col values

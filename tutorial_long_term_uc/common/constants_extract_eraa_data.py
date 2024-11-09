@@ -27,4 +27,9 @@ class ERAADatasetDescr:
             for param_name, param_val in pypsa_params.items():
                 if is_str_bool(bool_str=param_val) is True:
                     self.pypsa_unit_params_per_agg_pt[agg_pt][param_name] = bool(param_val)
-                                 
+
+
+@dataclass
+class PypsaStaticParams:
+    # per aggreg. prod. unit list of minimal parameters for PyPSA generators to be built
+    min_unit_params_per_agg_pt: Dict[str, List[str]]

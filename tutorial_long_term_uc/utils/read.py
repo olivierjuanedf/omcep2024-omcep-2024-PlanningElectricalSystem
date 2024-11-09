@@ -1,7 +1,8 @@
 import json
 
-from common.long_term_uc_io import set_json_fixed_params_file, set_json_params_tb_modif_file
-from common.constants_extract_eraa_data import ERAADatasetDescr
+from common.long_term_uc_io import set_json_fixed_params_file, set_json_params_tb_modif_file, \
+    set_json_pypsa_static_params_file
+from common.constants_extract_eraa_data import ERAADatasetDescr, PypsaStaticParams
 from common.uc_run_params import UCRunParams
 from utils.dir_utils import check_file_existence
 
@@ -34,3 +35,12 @@ def read_and_check_uc_run_params():
     uc_run_params.process(available_countries=eraa_data_descr.available_countries)
     uc_run_params.coherence_check(eraa_data_descr=eraa_data_descr)
     return eraa_data_descr, uc_run_params
+
+
+def read_and_check_pypsa_static_params() -> PypsaStaticParams:
+    json_pypsa_static_params_file = set_json_pypsa_static_params_file()
+    print(f"Read and check PyPSA static parameters file; the ones modified in file {json_pypsa_static_params_file}")
+
+    json_pypsa_static_params = check_and_load_json_file(json_file=json_pypsa_static_params_file,
+                                                        file_descr="JSON PyPSA static params")
+    return PypsaStaticParams(**json_pypsa_static_params)

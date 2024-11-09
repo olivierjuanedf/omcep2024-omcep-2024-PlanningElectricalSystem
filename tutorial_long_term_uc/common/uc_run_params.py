@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Union
 
 from common.constants_extract_eraa_data import ERAADatasetDescr
+from common.error_msgs import print_errors_list
 from common.long_term_uc_io import MIN_DATE_IN_DATA, MAX_DATE_IN_DATA
 from utils.basic_utils import get_period_str
 
@@ -13,12 +14,7 @@ N_DAYS_UC_DEFAULT = 9
 
 
 def uncoherent_param_stop(param_errors: List[str]):
-    error_msg = "There are error(s) in JSON params to be modif. file:"
-    for elt_error in param_errors:
-        error_msg += f"\n- {elt_error}"
-    error_msg += "\n-> STOP"
-    print(f"[ERROR] {error_msg}")
-    sys.exit(1)
+    print_errors_list(error_name="in JSON params to be modif. file", errors_list=param_errors)
 
 
 def check_unique_int_value(param_name: str, param_value) -> Optional[str]:
