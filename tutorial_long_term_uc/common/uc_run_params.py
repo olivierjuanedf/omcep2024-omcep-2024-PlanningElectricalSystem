@@ -5,7 +5,7 @@ from typing import Dict, List, Optional, Union
 from common.constants_extract_eraa_data import ERAADatasetDescr
 from common.error_msgs import print_errors_list, print_out_msg
 from common.long_term_uc_io import MIN_DATE_IN_DATA, MAX_DATE_IN_DATA
-from utils.basic_utils import get_period_str
+from utils.basic_utils import get_period_str, are_lists_eq
 
 
 DATE_FORMAT = "%Y/%m/%d"
@@ -95,6 +95,13 @@ class UCRunParams:
         if len(unknown_agg_pt_countries) > 0:
             errors_list.append(f"Unknown countrie(s) {msg_suffix}: {unknown_agg_pt_countries}")
  
+         # check coherence of prod types in all different params
+        agg_pt_countries_with_val = [elt_country for elt_country in agg_pt_countries 
+                                     if len(self.selected_agg_prod_types[elt_country]) > 0]
+        countries_lists = [self.selected_countries, agg_pt_countries_with_val]
+        if are_lists_eq(list_of_lists=countries_lists) is False:
+            errors_list.append(f"Countries are different in selection list ({self.selected_countries}) versus keys of aggreg. prod. types selection dict. - wo None value ({agg_pt_countries_with_val})")
+
         # check that aggreg. prod types are not repeated, and known
         msg_suffix = "in values of dict. of aggreg. prod. types selection, for country"
         for elt_country, current_agg_pt in self.selected_agg_prod_types.items():

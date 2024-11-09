@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 from common.constants_temporal import DAY_OF_WEEK
 from common.long_term_uc_io import DATE_FORMAT_PRINT
@@ -61,4 +61,15 @@ def cast_str_bool(bool_str: str) -> Union[str, bool]:
         return bool(bool_str)
     else:
         return bool_str
-    
+
+
+def are_lists_eq(list_of_lists: List[list]) -> bool:
+    first_list = list_of_lists[0]
+    len_first_list = len(first_list)
+    set_first_list = set(first_list)
+    n_lists = len(list_of_lists)
+    for i_list in range(1, n_lists):
+        current_list = list_of_lists[i_list]
+        if (len(current_list) == len_first_list and set(current_list) == set_first_list) is False:
+            return False
+    return True
