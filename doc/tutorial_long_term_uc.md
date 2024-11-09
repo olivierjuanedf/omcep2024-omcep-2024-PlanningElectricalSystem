@@ -1,5 +1,10 @@
 # Tutorial - Long-Term Unit Commitment part
 
+## Saturday morning session
+
+* PyPSA documentation: https://pypsa.readthedocs.io/en/latest/
+* ERAA documentation (2023.2 will be used): https://www.entsoe.eu/outlooks/eraa/
+
 ## Appendices
 
 ### Input data description
