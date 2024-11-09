@@ -31,7 +31,7 @@ n_t = int(T/delta_t)
 #n_t= T*50    #we advice 50*T
 
 ratio=(delta_t)/(delta_x)
-print(f'n_t = {n_t}, delta_t = {delta_t}, delta_x = {delta_x}, ratio = { ratio }')
+print(f'n_t = {n_t}, delta_t = {delta_t}, delta_x = {delta_x}, ratio = { round(ratio,3) }')
 
 d_t = np.linspace(0.,T,n_t+1)
 d_x = np.linspace(0.,1,n_x+1)

@@ -96,7 +96,7 @@ def gfw(nb_max_iter): # GFW algorithm
     rho_input = f(u_input)
     input = chi ( rho_input , u_input )
     vop=opv(input[0],input[1])
-    print('At initialization problem\'s value is:'  , vop)
+    print('At initialization problem\'s value is:'  , round(vop,3))
    
     ######### Initialization #########
    
@@ -130,7 +130,7 @@ def gfw(nb_max_iter): # GFW algorithm
 
     
         #To print all details of the iteration:
-        print(f'k={k} \\ problem\'s value = { opv(rho_k,w_k) } \\ optimality gap = {epsilon_k} \\ step : {step} ' )
+        print(f'k={k} \\ problem\'s value = { round(opv(rho_k,w_k),3) } \\ optimality gap = {epsilon_k} \\ step : {step} ' )
     
     u_k = reconstruct_control( rho_k , w_k)
     return (list_epsilon , rho_k , u_k)
@@ -147,7 +147,7 @@ def gfw_accelerated(nb_max_iter : int): # GFW algorithm
     rho_input = f(u_input)
     input = chi ( rho_input , u_input )
     vop=opv(input[0],input[1])
-    print('At initialization problem\'s value is:'  , vop)
+    print('At initialization problem\'s value is:'  , round(vop,3))
       
     [(rho_k,w_k),(rho_bar_k,w_bar_k)] = [br(input[0],False)[0]]*2
     
@@ -184,7 +184,7 @@ def gfw_accelerated(nb_max_iter : int): # GFW algorithm
 
         #To print all details of the iteration:
         list_epsilon.append(epsilon_k)
-        print(f'k={k} \\ problem\'s value = { opv(rho_k,w_k) } \\ optimality gap = {epsilon_k} \\ step : {step} ' )
+        print(f'k={k} \\ problem\'s value = { round(opv(rho_k,w_k),3) } \\ optimality gap = {round(epsilon_k,3)} \\ step : {step} ' )
 
 
     u_k = reconstruct_control( rho_k , w_k)
