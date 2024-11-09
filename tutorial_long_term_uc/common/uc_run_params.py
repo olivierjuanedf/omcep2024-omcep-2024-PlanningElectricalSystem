@@ -1,10 +1,9 @@
-import sys
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Union
 
 from common.constants_extract_eraa_data import ERAADatasetDescr
-from common.error_msgs import print_errors_list
+from common.error_msgs import print_errors_list, print_out_msg
 from common.long_term_uc_io import MIN_DATE_IN_DATA, MAX_DATE_IN_DATA
 from utils.basic_utils import get_period_str
 
@@ -117,5 +116,5 @@ class UCRunParams:
         if len(errors_list) > 0:
             uncoherent_param_stop(param_errors=errors_list)
         else:
-            print("Modified LONG-TERM UC PARAMETERS ARE COHERENT!")
-            print(f"RUN CAN START with parameters: {str(self)}")
+            print_out_msg(msg_level="info", msg="Modified LONG-TERM UC PARAMETERS ARE COHERENT!")
+            print_out_msg(msg_level="info", msg=f"RUN CAN START with parameters: {str(self)}")

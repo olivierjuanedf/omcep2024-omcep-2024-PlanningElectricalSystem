@@ -29,7 +29,19 @@ class ERAADatasetDescr:
                     self.pypsa_unit_params_per_agg_pt[agg_pt][param_name] = bool(param_val)
 
 
+ALL_UNITS_KEY = "all_units"
+
+
 @dataclass
 class PypsaStaticParams:
     # per aggreg. prod. unit list of minimal parameters for PyPSA generators to be built
     min_unit_params_per_agg_pt: Dict[str, List[str]]
+
+    def process(self):
+        # add common static params to all agg. prod type
+        if ALL_UNITS_KEY in self.min_unit_params_per_agg_pt:
+            common_min_params = self.min_unit_params_per_agg_pt[ALL_UNITS_KEY]
+            self.min_unit_params_per_agg_pt.pop(ALL_UNITS_KEY)
+            for agg_pt in self.min_unit_params_per_agg_pt:
+                self.min_unit_params_per_agg_pt[agg_pt].extend(common_min_params)
+                
