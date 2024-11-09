@@ -1,9 +1,15 @@
 # Tutorial - Long-Term Unit Commitment part
 
-## Saturday morning session
+## Saturday morning session: start simple, with "blank running"
 
 * PyPSA documentation: https://pypsa.readthedocs.io/en/latest/
 * ERAA documentation (2023.2 will be used): https://www.entsoe.eu/outlooks/eraa/
+
+1) **Look at both JSON input parameters files** described in Appendix (the ones in folder *input\long_term_uc*).
+2) **Change values in *elec-europe_params_to-be-modif.json* parameter file** -> you can prepare different European electricity system configurations. Save them under different names; then copy-paste content into *elec-europe_params_to-be-modif.json* to...
+3) **Test that execution of *tutorial_long_term_uc\my_little_eur_long_term_uc.py* run properly**: you should get a log "THE END...". If not, the "checkers" should have indicated you some aspects to be corrected in your - modified - parametrization.
+
+**Real runs** (UC model creation and resolution) will come this afternoon! (and after if you are motivated)
 
 ## Appendices
 
