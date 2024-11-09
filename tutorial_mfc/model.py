@@ -4,6 +4,7 @@ import pandas as pd
 import os
 import json
 import datetime
+import scipy
 
 ### Read .json data ###
 
@@ -51,9 +52,10 @@ if v2g:
     I.append(-1) #we add the V2G mode
 
 static_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','output','long_term_uc','data','aggregate_ev_static_params.csv')
-number_EV,battery_capacity = data_reader.read_capacity_data(v2g = v2g, file_path=static_data_path)
-#battery_capacity = 80 #kWh
-#number_EV = 10000
+#number_EV,battery_capacity = data_reader.read_capacity_data(v2g = v2g, file_path=static_data_path)
+
+battery_capacity = data["battery_capacity"]  #kWh
+number_EV = data["nb_EV_for_implementation"]
 
 
 def gen_init_distrib():  
@@ -144,8 +146,12 @@ def H(x):
 
 ########################## For the mean field model ##########################
 
-signal_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','long_term_uc','data',
-                                 data["file_conso_to_follow"])
+file_data_path = "stat-battery_charging-profile_"+data["country"]+"_"+str(t_0.year)+t_0.strftime("%Y-%m-%d")
+signal_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','long_term_uc','data',  file_data_path)
+if not os.path.isfile(signal_data_path):
+    raise ValueError('The file {file_data_path} does not exists')
+
+#signal_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','long_term_uc','data',  data["file_conso_to_follow"])
 signal = data_reader.read_signal(v2g = v2g, file_path=signal_data_path) 
 #signal_dict gives the average consumption per EV !
 signal_dict = {t :signal[signal['time'] == t_0 + datetime.timedelta(hours=t)]['power'].iloc[0] / number_EV for t in range(T+2)}

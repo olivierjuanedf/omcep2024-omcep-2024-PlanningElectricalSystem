@@ -2,7 +2,6 @@
 "run_gfw": 1,
 "max_iteration": 100,
 "acceleration": 0,
-"t_0": "07/01/2030 7:00",
 "T": 6,
 "delta_t" : 0.02, 
 "p_max" : 10,
@@ -11,5 +10,8 @@
 "c_3": 100,
 "c_4": 70,
 "file_conso_to_follow" : "aggreg_ev_france_charging_profiles_2030-1-7.csv",
-"nb_EV_for_implementation": 3125
+"nb_EV_for_implementation": 3125,
+"t_0": "07/01/1990 7:00",
+"battery_capacity": 80,
+"country" : "France"
 }
