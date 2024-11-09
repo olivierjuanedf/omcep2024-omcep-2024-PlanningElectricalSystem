@@ -130,7 +130,7 @@ def gfw(nb_max_iter): # GFW algorithm
 
     
         #To print all details of the iteration:
-        print(f'k={k} \\ problem\'s value = { round(opv(rho_k,w_k),3) } \\ optimality gap = {epsilon_k} \\ step : {step} ' )
+        print(f'k={k} \\ problem\'s value = { round(opv(rho_k,w_k),3) } \\ optimality gap = {round(epsilon_k,3)} \\ step : {round(step,3)} ' )
     
     u_k = reconstruct_control( rho_k , w_k)
     return (list_epsilon , rho_k , u_k)
@@ -184,7 +184,7 @@ def gfw_accelerated(nb_max_iter : int): # GFW algorithm
 
         #To print all details of the iteration:
         list_epsilon.append(epsilon_k)
-        print(f'k={k} \\ problem\'s value = { round(opv(rho_k,w_k),3) } \\ optimality gap = {round(epsilon_k,3)} \\ step : {step} ' )
+        print(f'k={k} \\ problem\'s value = { round(opv(rho_k,w_k),3) } \\ optimality gap = {round(epsilon_k,3)} \\ step : {round(step,3)} ' )
 
 
     u_k = reconstruct_control( rho_k , w_k)
