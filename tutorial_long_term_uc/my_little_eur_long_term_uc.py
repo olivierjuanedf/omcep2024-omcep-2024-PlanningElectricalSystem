@@ -36,7 +36,7 @@ control_min_pypsa_params_per_gen_units(generation_units_data=generation_units_da
 
 # create PyPSA network
 from include.dataset_builder import init_pypsa_network, add_gps_coordinates, add_energy_carrier, \
-  add_generators, add_loads, add_interco_links
+  add_generators, add_loads, add_interco_links, save_lp_model, get_stationary_batt_opt_dec
 network = init_pypsa_network(df_demand_first_country=demand[uc_run_params.selected_countries[0]])
 # add GPS coordinates
 selec_countries_gps_coords = \
@@ -49,4 +49,12 @@ network = add_generators(network=network, generators_data=generation_units_data)
 network = add_loads(network=network, demand=demand)
 network = add_interco_links(network, countries=uc_run_params.selected_countries)
 print("PyPSA network main properties:", network)
+network.plot(title="My little elec. Europe network", color_geomap=True, jitter=0.3)
+print("Optimize 'network' - i.e. solve associated UC problem")
+result = network.optimize(solver_name="highs")
+print(result)
+save_lp_model(network, year=uc_run_params.selected_target_year, 
+              n_countries=len(uc_run_params.selected_countries), 
+              period_start=uc_run_params.uc_period_start)
+# stationary_batt_opt_dec = get_stationary_batt_opt_dec(network, countries=uc_run_params.selected_countries)
 print("THE END of European PyPSA-ERAA UC simulation")

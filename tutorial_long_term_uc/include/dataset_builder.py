@@ -1,4 +1,6 @@
 import sys
+from pathlib import Path
+from datetime import datetime
 import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple, Union
@@ -175,7 +177,7 @@ def add_generators(network, generators_data: Dict[str, List[GenerationUnitData]]
                 network.add("StorageUnit", bus=f"{country_bus_name}", **pypsa_gen_unit_dict)
             else:
                 network.add("Generator", bus=f"{country_bus_name}", **pypsa_gen_unit_dict)
-
+    print("Considered generators", network.generators)
     return network
 
 
@@ -231,3 +233,35 @@ def add_interco_links(network, countries: List[str]):
         network.add("Link", **link)
 
     return network
+
+
+def set_period_start_file(year: int, period_start: datetime) -> str:
+    return datetime(year=year, month=period_start.month, day=period_start.day).strftime("%Y-%m-%d")
+
+
+def save_lp_model(network, year: int, n_countries: int, period_start: datetime):
+    print("Save lp model")
+    import pypsa.optimization as opt
+    from common.long_term_uc_io import OUTPUT_DATA_FOLDER
+
+    m = opt.create_model(network)
+    # to avoid suppressing previous runs results
+    run_id = np.random.randint(99)
+    period_start_file = set_period_start_file(year=year, period_start=period_start)
+    file_suffix = f"{n_countries}-countries_{period_start_file}_{run_id}"
+    m.to_file(Path(f'{OUTPUT_DATA_FOLDER}/model_{file_suffix}.lp'))
+
+
+def get_stationary_batt_opt_dec(network, countries: List[str]):
+    stationary_batt_opt_dec = {}
+    # for all but storages
+    # network.generators_t.p
+    # for storages
+    # network.storage_units_t.p_dispatch
+    # network.generators.loc["fra_coal"] -> info given asset
+    # network.generators_t.p_set
+    for generator in network.generators:
+        if generator.carrier == "flexibility":
+            bus_name = generator.bus
+            current_country = [country for country in countries if country.startswith(bus_name)][0]
+            stationary_batt_opt_dec[current_country] = generator.p_nom_opt

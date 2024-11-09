@@ -178,6 +178,7 @@
   },
   "pypsa_unit_params_per_agg_pt": {
     "batteries": {
+      "carrier": "flexibility",
       "p_min_pu": -1,
       "p_max_pu": 1
     },
