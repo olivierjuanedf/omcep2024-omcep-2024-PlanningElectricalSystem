@@ -225,5 +225,9 @@ def add_interco_links(network, countries: List[str]):
     if len(links_wo_capa_data) > 0:
         print_out_msg(msg_level="error", msg="There are interco. links without capacity data -> STOP")
         sys.exit(1)
+    
+    # add to PyPSA network
+    for link in links:
+        network.add("Link", **link)
 
     return network
