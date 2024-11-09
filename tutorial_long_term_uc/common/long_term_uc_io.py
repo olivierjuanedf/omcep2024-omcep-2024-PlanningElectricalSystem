@@ -38,6 +38,7 @@ class ComplemDataSources:
     from_eraa_data: str = "from_eraa_data"
 
 
+LT_UC_COMMON_FOLDER = "tutorial_long_term_uc/common"
 COLUMN_NAMES = ColumnNames()
 COMPLEM_DATA_SOURCES = ComplemDataSources()
 DATE_FORMAT_FILE = "%Y-%m-%d"
@@ -58,12 +59,16 @@ OUTPUT_DATA_FOLDER = "output/long_term_uc/data"
 OUTPUT_FIG_FOLDER = "output/long_term_uc/figures"
 
 
-def set_json_fixed_params_file():
+def set_json_fixed_params_file() -> str:
     return os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_fixed.json")
 
 
-def set_json_params_tb_modif_file():
+def set_json_params_tb_modif_file() -> str:
     return os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_to-be-modif.json")
+
+
+def set_json_pypsa_static_params_file() -> str:
+    return os.path.join(LT_UC_COMMON_FOLDER, "pypsa_static_params.json") 
 
 
 def set_prod_figure(country: str, year: int, start_horizon: datetime) -> str:
