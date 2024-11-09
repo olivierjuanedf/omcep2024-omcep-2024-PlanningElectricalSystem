@@ -39,10 +39,14 @@ from include.dataset_builder import init_pypsa_network, add_gps_coordinates, add
   add_generators, add_loads, add_interco_links
 network = init_pypsa_network(df_demand_first_country=demand[uc_run_params.selected_countries[0]])
 # add GPS coordinates
-network = add_gps_coordinates(network=network, countries_gps_coords=eraa_data_descr.gps_coordinates)
+selec_countries_gps_coords = \
+  {country: gps_coords for country, gps_coords in eraa_data_descr.gps_coordinates.items() 
+   if country in uc_run_params.selected_countries}
+network = add_gps_coordinates(network=network, countries_gps_coords=selec_countries_gps_coords)
 from fuel_sources import FUEL_SOURCES
 network = add_energy_carrier(network=network, fuel_sources=FUEL_SOURCES)
 network = add_generators(network=network, generators_data=generation_units_data)
 network = add_loads(network=network, demand=demand)
 network = add_interco_links(network, countries=uc_run_params.selected_countries)
+print("PyPSA network main properties:", network)
 print("THE END of European PyPSA-ERAA UC simulation")
