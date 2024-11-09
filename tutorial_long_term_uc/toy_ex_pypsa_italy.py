@@ -6,25 +6,64 @@ First very simple toy Unit Commitment model of Italy zone - alone... with PyPSA 
 """
 Fix a few "global" parameters to simply modify a few elements when making "sensitivity tests"
 """
-from long_term_uc_constants import COUNTRIES
-year = 2025  # select first ERAA year available, as an example 
-climatic_year = 2000  # and a given "climatic year" (to possibly test different climatic*weather conditions)
-start_horizon = 31 * 24  # idx of first time-slot of the temporal period to be considered 
-time_horizon_in_hours = 7 * 24  # number of - hourly - time-slots in considered period
+from datetime import datetime, timedelta
+from common.uc_run_params import UCRunParams
 
+modeled_countries = ["italy"]  # unique country modeled in this example
+year = 2025  # select first ERAA year available, as an example 
+climatic_year = 1989  # and a given "climatic year" (to possibly test different climatic*weather conditions)
+res_for_reading_test = ["wind_onshore", "wind_offshore", "solar_pv"]
+uc_period_start = datetime(year=1900, month=1, day=1)
+uc_period_end = uc_period_start + timedelta(days=14)
+uc_run_params = UCRunParams(selected_countries=modeled_countries, selected_target_year=year, 
+                            selected_climatic_year=climatic_year, 
+                            selected_agg_prod_types={"italy": res_for_reading_test},
+                            uc_period_start=uc_period_start,
+                            uc_period_end=uc_period_end)
+AGG_PROD_TYPES_DEF = {"res_capa-factors": {"solar_pv": ["lfsolarpv"],
+                                           "solar_thermal": ["csp_nostorage"], 
+                                           "wind_offshore": ["wind_offshore"],
+                                           "wind_onshore": ["wind_onshore"]
+                                           },
+                      "generation_capas": {"batteries": ["batteries"],
+                                           "biofuel": ["biofuel"],
+                                           "coal": ["coal", "hard_coal", "lignite"],
+                                           "dsr": ["demand_side_response_capacity"],
+                                           "gas": ["gas"],
+                                           "hydro_pondage": ["hydro_pondage"],
+                                           "hydro_pump_storage_closed_loop": ["hydro_pump_storage_closed_loop"],
+                                           "hydro_pump_storage_open_loop": ["hydro_pump_storage_open_loop"],
+                                           "hydro_reservoir": ["hydro_reservoir"],
+                                           "hydro_run_of_river": ["hydro_run_of_river"],
+                                           "nuclear": ["nuclear"], "oil": ["oil"],
+                                           "others_fatal": ["others_non-renewable", "others_renewable"],
+                                           "solar_pv": ["solar_photovoltaic"],
+                                           "solar_thermal": ["solar_thermal"],
+                                           "wind_offshore": ["wind_offshore"], "wind_onshore": ["wind_onshore"]
+                                        }
+                      }
 """
 Get needed data
 """
-from tutorial_long_term_uc.utils.eraa_data_reader import get_countries_data
+from utils.eraa_data_reader import get_countries_data
 
-# here get data for all (meta-)countries (not only Italy)... just for test 
-demand, wind_on_shore, wind_off_shore, solar_pv = \
-    get_countries_data(countries=COUNTRIES, year=year, climatic_year=climatic_year)
+# get data for Italy... just for test 
+demand, agg_cf_data, agg_gen_capa_data = \
+    get_countries_data(uc_run_params=uc_run_params, agg_prod_types_with_cf_data=res_for_reading_test,
+                       aggreg_prod_types_def=AGG_PROD_TYPES_DEF)
+
+# in this case decompose aggreg. CF data into three sub-dicts (for following ex. to be more explicit)
+from utils.df_utils import selec_in_df_based_on_list
+solar_pv = {"italy": selec_in_df_based_on_list(df=agg_cf_data["italy"], selec_col="production_type_agg",
+                                               selec_vals=["solar_pv"], rm_selec_col=True)}
+wind_on_shore = {"italy": selec_in_df_based_on_list(df=agg_cf_data["italy"], selec_col="production_type_agg",
+                                                    selec_vals=["wind_onshore"], rm_selec_col=True)}
+wind_off_shore = {"italy": selec_in_df_based_on_list(df=agg_cf_data["italy"], selec_col="production_type_agg",
+                                                     selec_vals=["wind_offshore"], rm_selec_col=True)}
 
 """Initialize PyPSA Network (basis of all!). And print it to check that for now it is... empty"""
 import pypsa
-modeled_countries = ["italy"]  # unique country modeled in this example
-network = pypsa.Network(snapshots=demand[modeled_countries[0]].index[0:time_horizon_in_hours])
+network = pypsa.Network(snapshots=demand[modeled_countries[0]]["value"].values)
 network
 
 """Add bus for considered country"""
@@ -46,9 +85,8 @@ country_trigram = country.upper()[:3]
 from fuel_sources import FUEL_SOURCES
 from italy_parameters import get_generators
 generators = get_generators(country_trigram=country_trigram, fuel_sources=FUEL_SOURCES, 
-                            wind_on_shore_data=wind_on_shore[country][start_horizon:start_horizon+time_horizon_in_hours],
-                            wind_off_shore_data=wind_off_shore[country][start_horizon:start_horizon+time_horizon_in_hours],
-                            solar_pv_data=solar_pv[country][:time_horizon_in_hours])
+                            wind_on_shore_data=wind_on_shore[country], wind_off_shore_data=wind_off_shore[country],
+                            solar_pv_data=solar_pv[country])
 
 """Loop over previous dictionary to add each of the generators to the PyPSA network"""
 for generator in generators:
@@ -58,7 +96,7 @@ for generator in generators:
 
 loads = [
     {"name": f"{country.capitalize()}-load", "bus": f"{country.capitalize()}",
-     "carrier": "AC", "p_set": demand[country][0:time_horizon_in_hours]["value"].values},
+     "carrier": "AC", "p_set": demand[country]["value"].values},
 ]
 
 """Add loads, here unique for now"""
