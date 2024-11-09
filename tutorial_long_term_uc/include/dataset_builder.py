@@ -265,3 +265,27 @@ def get_stationary_batt_opt_dec(network, countries: List[str]):
             bus_name = generator.bus
             current_country = [country for country in countries if country.startswith(bus_name)][0]
             stationary_batt_opt_dec[current_country] = generator.p_nom_opt
+
+
+def plot_uc_run_figs(network, countries: List[str]):
+    import matplotlib.pyplot as plt
+    print("Plot generation and prices figures")
+
+    # p_nom_opt is the optimized capacity (that can be also a variable in PyPSA...
+    # but here not optimized -> values in input data plotted)
+    for country in countries:
+        country_bus_name = get_country_bus_name(country=country)
+        network.generators.p_nom_opt.drop(f"Failure_{country_bus_name}").div(1e3).plot.bar(ylabel="GW", figsize=(8, 3))
+    # [Coding trick] Matplotlib can directly adapt size of figure to fit with values plotted
+    plt.tight_layout()
+
+    # And "stack" of optimized production profiles
+    network.generators_t.p.div(1e3).plot.area(subplots=False, ylabel="GW")
+    from common.long_term_uc_io import set_prod_figure, set_price_figure
+    plt.savefig(set_prod_figure(country=country, year=year, start_horizon=uc_run_params.uc_period_start))
+    plt.tight_layout()
+
+    # Finally, "marginal prices" -> meaning? How can you interprete the very constant value plotted?
+    network.buses_t.marginal_price.mean(1).plot.area(figsize=(8, 3), ylabel="Euro per MWh")
+    plt.savefig(set_price_figure(country=country, year=year, start_horizon=uc_run_params.uc_period_start))
+    plt.tight_layout()

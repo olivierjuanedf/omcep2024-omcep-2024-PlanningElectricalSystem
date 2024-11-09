@@ -56,5 +56,4 @@ print(result)
 save_lp_model(network, year=uc_run_params.selected_target_year, 
               n_countries=len(uc_run_params.selected_countries), 
               period_start=uc_run_params.uc_period_start)
-# stationary_batt_opt_dec = get_stationary_batt_opt_dec(network, countries=uc_run_params.selected_countries)
-print("THE END of European PyPSA-ERAA UC simulation")
+print("THE END of European PyPSA-ERAA UC simulation... missing some interesting parts... to come at OMCEP2025?")
