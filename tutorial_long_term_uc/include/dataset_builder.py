@@ -1,10 +1,12 @@
 import pandas as pd
 import numpy as np
-from typing import Dict, List, Union
+from typing import Dict, List, Tuple, Union
 from dataclasses import dataclass
+import pypsa
 
 from common.error_msgs import print_errors_list, print_out_msg
 from common.long_term_uc_io import COMPLEM_DATA_SOURCES, COLUMN_NAMES
+from fuel_sources import FuelSources
 
 
 @dataclass
