@@ -29,6 +29,7 @@ def read_and_check_uc_run_params():
 
     print("... and check that modifications done are coherent with available ERAA data")
     eraa_data_descr = ERAADatasetDescr(**json_params_fixed)
+    eraa_data_descr.process()
     uc_run_params = UCRunParams(**json_params_tb_modif)
     uc_run_params.process(available_countries=eraa_data_descr.available_countries)
     uc_run_params.coherence_check(eraa_data_descr=eraa_data_descr)

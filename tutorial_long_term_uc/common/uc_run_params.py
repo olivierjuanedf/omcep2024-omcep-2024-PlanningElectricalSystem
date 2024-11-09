@@ -17,6 +17,7 @@ def uncoherent_param_stop(param_errors: List[str]):
     for elt_error in param_errors:
         error_msg += f"\n- {elt_error}"
     error_msg += "\n-> STOP"
+    print(f"[ERROR] {error_msg}")
     sys.exit(1)
 
 
