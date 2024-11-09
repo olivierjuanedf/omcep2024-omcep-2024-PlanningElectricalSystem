@@ -30,7 +30,7 @@ def build_trajectories_markov_chain(nb: int, alpha: dict)-> (dict,dict) :
     
     for ev in range(nb):
         mode = initial_state[ev][0]
-        soc = int(initial_state[ev][1]/delta_x)
+        soc = initial_state[ev][1]
         empirical_distribution[mode][0][soc] +=1/nb
         for t in i_t[1:]:
             proba = {}

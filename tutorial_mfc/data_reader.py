@@ -25,8 +25,10 @@ def read_signal(v2g : bool, file_path : str) -> pd.DataFrame:
     if v2g:
         name = 'fra_v2g'
     data_signal  = pd.read_csv(file_path, sep=';',encoding='utf-8') 
-    data_signal =  data_signal[data_signal['aggregate_ev']==name]
-    data_signal = data_signal.drop(['aggregate_ev'], axis = 1)
+    if len(data_signal.columns)==4:
+        data_signal =  data_signal[data_signal['aggregate_ev']==name]
+        data_signal = data_signal.drop(['aggregate_ev'], axis = 1)
+
     data_signal['date'] = pd.to_datetime(data_signal['date'], dayfirst=True)
     data_signal = data_signal.rename(columns={"date":"time","consumption_p":"power"})
 

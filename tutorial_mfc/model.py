@@ -1,3 +1,4 @@
+import scipy.stats
 import data_reader
 import numpy as np
 import pandas as pd
@@ -57,13 +58,27 @@ static_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)), '..
 battery_capacity = data["battery_capacity"]  #kWh
 number_EV = data["nb_EV_for_implementation"]
 
+def beta_parameters(mean, std_dev):
+    intermediate_value = (mean * (1 - mean)) / (std_dev ** 2) - 1
+    
+    alpha = mean * intermediate_value
+    beta = (1 - mean) * intermediate_value
+    
+    return alpha, beta
 
 def gen_init_distrib():  
+    
     # Returns the initial distribution
 
     m_0 = { i :  np.array([0.0 for _ in i_x]) for  i in I }
     
-    m_0[0][0] = 1 # all the EV are in mode 0 with 0 SoC at initial time
+    mean_soc = data["mean_soc"]
+    std_soc =  data["std_soc"]
+    a,b =  beta_parameters(mean_soc, std_soc)
+    for l in i_x:
+        cdf_x = scipy.stats.beta.cdf(l*delta_x, a, b)
+        cdf_y = scipy.stats.beta.cdf((l+1)*delta_x, a, b)
+        m_0[0][l] = cdf_y - cdf_x # all the EV are in mode 0 with 0 SoC with beta distribution at initial time
 
     return m_0
 
@@ -145,11 +160,13 @@ def H(x):
 
 
 ########################## For the mean field model ##########################
-
-file_data_path = "stat-battery_charging-profile_"+data["country"]+"_"+str(t_0.year)+t_0.strftime("%Y-%m-%d")
+file_data_path = "stat-battery_charging_profile_"+data["country"]+"_"+t_0.strftime("%Y-%m-%d")+".csv"
 signal_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','long_term_uc','data',  file_data_path)
 if not os.path.isfile(signal_data_path):
-    raise ValueError('The file {file_data_path} does not exists')
+    file_data_path = "stat-battery_charging_profile_"+data["country"]+"_"+t_0.strftime("%Y-%-m-%-d")+".csv"
+    signal_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','long_term_uc','data',  file_data_path)
+    if not os.path.isfile(signal_data_path):
+        raise ValueError('The file '+file_data_path+' does not exists')
 
 #signal_data_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','output','long_term_uc','data',  data["file_conso_to_follow"])
 signal = data_reader.read_signal(v2g = v2g, file_path=signal_data_path) 
