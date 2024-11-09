@@ -131,9 +131,12 @@ def get_countries_data(uc_run_params: UCRunParams, agg_prod_types_with_cf_data: 
                     df_res_cf_list.extend(current_agg_pt_df_res_cf_list)
 
         # concatenate, aggreg. over prod type of same aggreg. type and avg
-        agg_cf_data[country] = \
-            set_aggreg_cf_prod_types_data(df_cf_list=df_res_cf_list, pt_agg_col=prod_type_agg_col, date_col=date_col,
-                                          val_col=value_col)
+        if len(df_res_cf_list) == 0:
+            print(n_spaces_msg * " " + f"[WARNING] No RES data available for country {country} -> not accounted for in UC model here")
+        else:
+            agg_cf_data[country] = \
+                set_aggreg_cf_prod_types_data(df_cf_list=df_res_cf_list, pt_agg_col=prod_type_agg_col, date_col=date_col,
+                                              val_col=value_col)
         
         # get installed generation capacity data
         print("Get installed generation capacities (unique file per country and year, with all prod. types in it)")
