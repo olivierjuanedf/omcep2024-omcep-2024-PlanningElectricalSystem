@@ -33,4 +33,16 @@ from utils.read import read_and_check_pypsa_static_params
 pypsa_static_params = read_and_check_pypsa_static_params()
 control_min_pypsa_params_per_gen_units(generation_units_data=generation_units_data,
                                        pypsa_min_unit_params_per_agg_pt=pypsa_static_params.min_unit_params_per_agg_pt)
+
+# create PyPSA network
+from include.dataset_builder import init_pypsa_network, add_gps_coordinates, add_energy_carrier, \
+  add_generators, add_loads
+network = init_pypsa_network(df_demand_first_country=demand[uc_run_params.selected_countries[0]])
+# add GPS coordinates
+network = add_gps_coordinates(network=network, countries_gps_coords=eraa_data_descr.gps_coordinates)
+from fuel_sources import FUEL_SOURCES
+network = add_energy_carrier(network=network, fuel_sources=FUEL_SOURCES)
+network = add_generators(network=network, generators_data=generation_units_data)
+network = add_loads(network=network, demand=demand)
+
 print("THE END of European PyPSA-ERAA UC simulation")
