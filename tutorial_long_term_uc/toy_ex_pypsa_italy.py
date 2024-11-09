@@ -63,12 +63,12 @@ wind_off_shore = {"italy": selec_in_df_based_on_list(df=agg_cf_data["italy"], se
 
 """Initialize PyPSA Network (basis of all!). And print it to check that for now it is... empty"""
 import pypsa
-network = pypsa.Network(snapshots=demand[modeled_countries[0]]["value"].values)
+print("Initialize PyPSA network")
+network = pypsa.Network(snapshots=demand[modeled_countries[0]].index)
 network
 
 """Add bus for considered country"""
 
-# [Coding trick] capitalize to put a string with first character in capital letter
 # N.B. Italy coordinates set randomly!
 from italy_parameters import gps_coords
 coordinates = {"italy": gps_coords}
@@ -130,7 +130,7 @@ print(f"Total cost at optimum: {network.objective:.2f}")
 
 from pathlib import Path
 import pypsa.optimization as opt
-from tutorial_long_term_uc.common.long_term_uc_io import OUTPUT_DATA_FOLDER
+from common.long_term_uc_io import OUTPUT_DATA_FOLDER
 m = opt.create_model(network)
 m.to_file(Path(f'{OUTPUT_DATA_FOLDER}/model_{country_trigram.lower()}.lp'))
 
@@ -147,11 +147,11 @@ plt.tight_layout()
 
 # And "stack" of optimized production profiles
 network.generators_t.p.div(1e3).plot.area(subplots=False, ylabel="GW")
-from tutorial_long_term_uc.common.long_term_uc_io import set_prod_figure, set_price_figure
-plt.savefig(set_prod_figure(country=country, year=year, start_horizon=start_horizon))
+from common.long_term_uc_io import set_prod_figure, set_price_figure
+plt.savefig(set_prod_figure(country=country, year=year, start_horizon=uc_run_params.uc_period_start))
 plt.tight_layout()
 
 # Finally, "marginal prices" -> meaning? How can you interprete the very constant value plotted?
 network.buses_t.marginal_price.mean(1).plot.area(figsize=(8, 3), ylabel="Euro per MWh")
-plt.savefig(set_price_figure(country=country, year=year, start_horizon=start_horizon))
+plt.savefig(set_price_figure(country=country, year=year, start_horizon=uc_run_params.uc_period_start))
 plt.tight_layout()

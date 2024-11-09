@@ -40,6 +40,7 @@ class ComplemDataSources:
 
 COLUMN_NAMES = ColumnNames()
 COMPLEM_DATA_SOURCES = ComplemDataSources()
+DATE_FORMAT_FILE = "%Y-%m-%d"
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 DATE_FORMAT_PRINT = "%Y/%m/%d"
 DT_FILE_PREFIX = DtFilePrefix()
@@ -65,9 +66,9 @@ def set_json_params_tb_modif_file():
     return os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_to-be-modif.json")
 
 
-def set_prod_figure(country: str, year: int, start_horizon: int) -> str:
-    return f"{OUTPUT_FIG_FOLDER}/prod_{country}_{year}_{start_horizon}.png"
+def set_prod_figure(country: str, year: int, start_horizon: datetime) -> str:
+    return f"{OUTPUT_FIG_FOLDER}/prod_{country}_{year}_{start_horizon.strftime(DATE_FORMAT_FILE)}.png"
 
 
-def set_price_figure(country: str, year: int, start_horizon: int) -> str:
-    return f"{OUTPUT_FIG_FOLDER}/prices_{country}_{year}_{start_horizon}.png"
+def set_price_figure(country: str, year: int, start_horizon: datetime) -> str:
+    return f"{OUTPUT_FIG_FOLDER}/prices_{country}_{year}_{start_horizon.strftime(DATE_FORMAT_FILE)}.png"
