@@ -27,6 +27,9 @@ class ERAADatasetDescr:
             for param_name, param_val in pypsa_params.items():
                 if is_str_bool(bool_str=param_val) is True:
                     self.pypsa_unit_params_per_agg_pt[agg_pt][param_name] = bool(param_val)
+        for country in self.gps_coordinates:
+            self.gps_coordinates[country] = tuple(self.gps_coordinates[country])
+
 
 
 ALL_UNITS_KEY = "all_units"
