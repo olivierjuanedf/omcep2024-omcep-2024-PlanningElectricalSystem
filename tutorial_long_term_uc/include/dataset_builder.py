@@ -1,3 +1,4 @@
+import sys
 import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple, Union
@@ -189,21 +190,40 @@ def add_loads(network, demand: Dict[str, pd.DataFrame]):
 
 
 from itertools import product
-INTERCO_CAPAS = {
-    ("poland", "germany"): None
-    }
+from common.constants_interco_capas import INTERCO_CAPAS
 
 
 def add_interco_links(network, countries: List[str]):
+    print(f"Add interco. links - between the selected countries: {countries}")
     links = []
+    links_wo_capa_data = []
     for country_origin, country_dest in product(countries, countries):
         if not country_origin == country_dest:
-            country_origin_bus_name = get_country_bus_name(country=country_origin)
-            country_dest_bus_name = get_country_bus_name(country=country_dest)
-            links.append({"name": f"{country_origin_bus_name}-{country_dest_bus_name}_AC", 
-                          "bus0": f"{country_origin_bus_name}",
-                          "bus1": f"{country_dest_bus_name}", 
-                          "p_nom": INTERCO_CAPAS[(country_origin, country_dest)], 
-                          "p_max_pu" : 1, "p_min_pu": -1}
-                          )
+            # TODO: fix AC/DC.... all AC here in names but not true (cf. CS students data)
+            current_link_capa = INTERCO_CAPAS[(country_origin, country_dest)]
+            current_reverse_link_capa = INTERCO_CAPAS[(country_dest, country_origin)]
+            if current_link_capa is None:
+                is_sym_interco = True
+                current_link_capa = current_reverse_link_capa 
+            elif current_reverse_link_capa is None:
+                is_sym_interco = True
+            else:
+                is_sym_interco = False
+            if current_link_capa is None:
+                links_wo_capa_data.append((country_origin, country_dest))
+            else:
+                country_origin_bus_name = get_country_bus_name(country=country_origin)
+                country_dest_bus_name = get_country_bus_name(country=country_dest)
+                if is_sym_interco is True:
+                    p_min_pu, p_max_pu = -1, 1
+                else:
+                    p_min_pu, p_max_pu = 0, 1
+                links.append({"name": f"{country_origin_bus_name}-{country_dest_bus_name}_ac", 
+                            "bus0": f"{country_origin_bus_name}", "bus1": f"{country_dest_bus_name}", 
+                            "p_nom": current_link_capa, "p_min_pu": p_min_pu, "p_max_pu" : p_max_pu}
+                            )
+    if len(links_wo_capa_data) > 0:
+        print_out_msg(msg_level="error", msg="There are interco. links without capacity data -> STOP")
+        sys.exit(1)
+
     return network
