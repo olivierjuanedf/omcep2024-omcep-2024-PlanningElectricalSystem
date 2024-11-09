@@ -132,3 +132,76 @@ def control_min_pypsa_params_per_gen_units(generation_units_data: Dict[str, List
                         errors_list=pypsa_params_errors_list)     
     else:
         print_out_msg(msg_level="info", msg="PyPSA NEEDED PARAMETERS FOR GENERATION UNITS CREATION HAVE BEEN LOADED!")
+
+
+def get_country_bus_name(country: str) -> str:
+    return country.lower()[:3]
+
+
+def init_pypsa_network(df_demand_first_country: pd.DataFrame):
+    print("Initialize PyPSA network")
+    network = pypsa.Network(snapshots=df_demand_first_country.index)
+    return network
+
+
+def add_gps_coordinates(network, countries_gps_coords: Dict[str, Tuple[float, float]]):
+    print("Add GPS coordinates") 
+    for country, gps_coords in countries_gps_coords.items():
+        country_bus_name = get_country_bus_name(country=country)
+        network.add("Bus", name=f"{country_bus_name}", x=gps_coords[0], y=gps_coords[1])
+    return network
+
+
+def add_energy_carrier(network, fuel_sources: Dict[str, FuelSources]):
+    print("Add energy carriers")
+    for carrier in list(fuel_sources.keys()):
+        network.add("Carrier", name=carrier, co2_emissions=fuel_sources[carrier].co2_emissions/1000)
+    return network
+
+
+STORAGE_LIKE_UNITS = ["batteries"]
+
+
+def add_generators(network, generators_data: Dict[str, List[GenerationUnitData]]):
+    print("Add generators - associated to their respective buses")
+    for country, gen_units_data in generators_data.items():
+        country_bus_name = get_country_bus_name(country=country)
+        for gen_unit_data in gen_units_data:
+            pypsa_gen_unit_dict = gen_unit_data.__dict__
+            if gen_unit_data.type in STORAGE_LIKE_UNITS:
+                network.add("StorageUnit", bus=f"{country_bus_name}", **pypsa_gen_unit_dict)
+            else:
+                network.add("Generator", bus=f"{country_bus_name}", **pypsa_gen_unit_dict)
+
+    return network
+
+
+def add_loads(network, demand: Dict[str, pd.DataFrame]):
+    print("Add loads - associated to their respective buses")
+    for country in demand:
+        country_bus_name = get_country_bus_name(country=country)
+        load_data = {"name": f"{country_bus_name}-load", "bus": f"{country_bus_name}",
+                     "carrier": "AC", "p_set": demand[country]["value"].values}
+        network.add("Load", **load_data)
+    return network
+
+
+from itertools import product
+INTERCO_CAPAS = {
+    ("poland", "germany"): None
+    }
+
+
+def add_interco_links(network, countries: List[str]):
+    links = []
+    for country_origin, country_dest in product(countries, countries):
+        if not country_origin == country_dest:
+            country_origin_bus_name = get_country_bus_name(country=country_origin)
+            country_dest_bus_name = get_country_bus_name(country=country_dest)
+            links.append({"name": f"{country_origin_bus_name}-{country_dest_bus_name}_AC", 
+                          "bus0": f"{country_origin_bus_name}",
+                          "bus1": f"{country_dest_bus_name}", 
+                          "p_nom": INTERCO_CAPAS[(country_origin, country_dest)], 
+                          "p_max_pu" : 1, "p_min_pu": -1}
+                          )
+    return network
