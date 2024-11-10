@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple, Union
 
 from utils.basic_utils import is_str_bool
+from utils.eraa_utils import set_interco_to_tuples
 
 
 INTERCO_STR_SEP = "2"
@@ -33,9 +34,8 @@ class ERAADatasetDescr:
                     self.pypsa_unit_params_per_agg_pt[agg_pt][param_name] = bool(param_val)
         for country in self.gps_coordinates:
             self.gps_coordinates[country] = tuple(self.gps_coordinates[country])
-        # from "{zone_origin}2{zone_dest}" format of interco names to tuples (zone_origin, zone_dest)
-        new_avail_intercos = [tuple(interco.split(INTERCO_STR_SEP)) for interco in self.available_intercos]
-        self.available_intercos = new_avail_intercos
+        # from "{zone_origin}{INTERCO_STR_SEP}{zone_dest}" format of interco names to tuples (zone_origin, zone_dest)
+        self.available_intercos = set_interco_to_tuples(interco_names=self.available_intercos)
 
 
 ALL_UNITS_KEY = "all_units"

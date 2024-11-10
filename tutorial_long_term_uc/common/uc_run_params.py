@@ -1,11 +1,12 @@
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Tuple, Union
 
 from common.constants_extract_eraa_data import ERAADatasetDescr
 from common.error_msgs import print_errors_list, print_out_msg
 from common.long_term_uc_io import MIN_DATE_IN_DATA, MAX_DATE_IN_DATA
 from utils.basic_utils import get_period_str, are_lists_eq
+from utils.eraa_utils import set_interco_to_tuples
 
 
 DATE_FORMAT = "%Y/%m/%d"
@@ -33,6 +34,7 @@ class UCRunParams:
     uc_period_end: Union[str, datetime] = None
     failure_power_capa: float = None
     failure_penalty: float = None
+    interco_capas_added_values: Union[Dict[str, float], Dict[Tuple[str, str], float]] = None
 
     def __repr__(self):
         repr_str = "UC long-term model run with params:"
@@ -58,7 +60,15 @@ class UCRunParams:
             if country not in self.selected_agg_prod_types \
                 or self.selected_agg_prod_types[country] is None:
                 self.selected_agg_prod_types[country] = []
-    
+        # empty dict if interco. added values is empty
+        if self.interco_capas_added_values is None:
+            self.interco_capas_added_values = {}
+        else:  # set interco. from {zone_origin}2{zone_destination} names to tuples
+            interco_tuples = set_interco_to_tuples(interco_names=self.interco_capas_added_values,
+                                                   return_corresp=True)
+            self.interco_capas_added_values = {interco_tuples[key]: val 
+                                               for key, val in self.interco_capas_added_values.items()}
+
     def coherence_check(self, eraa_data_descr: ERAADatasetDescr):
         errors_list = []
         # check that there is no repetition of countries

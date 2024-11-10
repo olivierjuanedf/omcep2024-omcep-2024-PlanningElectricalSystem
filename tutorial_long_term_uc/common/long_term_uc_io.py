@@ -55,6 +55,7 @@ GEN_CAPA_SUBDT_COLS = ["power_capacity", "power_capacity_turbine", "power_capaci
                        "power_capacity_injection", "power_capacity_offtake"]
 INPUT_ERAA_FOLDER = "data/ERAA_2023-2"
 INPUT_LT_UC_FOLDER = "input/long_term_uc"
+INTERCO_STR_SEP = "2"
 # first date in ERAA data (fictive 364 days calendar)
 MIN_DATE_IN_DATA = datetime(year=1900, month=1, day=1)
 # first date NOT in ERAA data (fictive 364 days calendar)
