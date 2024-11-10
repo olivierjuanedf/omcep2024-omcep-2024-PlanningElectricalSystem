@@ -16,7 +16,7 @@ uc_period_msg = get_period_str(period_start=uc_run_params.uc_period_start,
                                period_end=uc_run_params.uc_period_end)
 
 print(f"Read needed ERAA ({eraa_data_descr.eraa_edition}) data for period {uc_period_msg}")
-demand, agg_cf_data, agg_gen_capa_data = \
+demand, agg_cf_data, agg_gen_capa_data, interco_capas = \
   get_countries_data(uc_run_params=uc_run_params,
                      agg_prod_types_with_cf_data=eraa_data_descr.agg_prod_types_with_cf_data,
                      aggreg_prod_types_def=eraa_data_descr.aggreg_prod_types_def

@@ -26,6 +26,8 @@ class ColumnNames:
     climatic_year: str = "climatic_year"
     production_type: str = "production_type"
     value: str = "value"
+    zone_origin: str = "zone_origin"
+    zone_destination: str = "zone_destination"
 
 
 @dataclass

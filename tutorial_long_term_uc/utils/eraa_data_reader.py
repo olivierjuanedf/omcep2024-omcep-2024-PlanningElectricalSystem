@@ -41,13 +41,34 @@ def gen_capa_pt_str_sanitizer(gen_capa_prod_type: str) -> str:
     return sanitized_gen_capa_pt
 
 
+def select_interco_capas(df_intercos_capa: pd.DataFrame, countries: List[str]) -> pd.DataFrame:
+    selection_col = "selected"
+    # add selection column
+    origin_col = COLUMN_NAMES.zone_origin
+    destination_col = COLUMN_NAMES.zone_destination
+    df_intercos_capa[selection_col] = \
+        df_intercos_capa.apply(lambda col: 1 if (col[origin_col] in countries 
+                                                 and col[destination_col] in countries) else 0, axis=1)
+    # keep only lines with both origin and destination zones in the list of available countries
+    df_intercos_capa = df_intercos_capa[df_intercos_capa[selection_col] == 1]
+    # remove selection column
+    all_cols = list(df_intercos_capa.columns)
+    all_cols.remove(selection_col)
+    df_intercos_capa = df_intercos_capa[all_cols]
+    return df_intercos_capa
+
+
 def get_countries_data(uc_run_params: UCRunParams, agg_prod_types_with_cf_data: List[str],
                        aggreg_prod_types_def: Dict[str, List[str]]) \
-                        -> (Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], Dict[str, pd.DataFrame]):
+                        -> (Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], pd.DataFrame):
     """
+    Get ERAA data necessary for the selected countries
     :param uc_run_params: UC run parameters, from which main reading infos will be obtained
     :param agg_prod_types_with_cf_data: aggreg. production types for which CF data must be read
     :param aggreg_prod_types_def: per-datatype definition of aggreg. to indiv. production types
+    :returns: {country: df with demand of this country}, {country: df with - per aggreg. prod type CF}, 
+    {country: df with installed generation capas}, df with all interconnection capas (for considered 
+    countries and year)
     """
     # set shorter names for simplicity
     countries = uc_run_params.selected_countries
@@ -165,8 +186,8 @@ def get_countries_data(uc_run_params: UCRunParams, agg_prod_types_with_cf_data: 
     if os.path.exists(interco_capas_data_file) is False:
         print_out_msg(msg_level="warning", msg=f"Generation capas data file does not exist: {country} not accounted for here")
     else:
-        df_intercos_capa = pd.read_csv(interco_capas_data_file, sep=column_sep, decimal=decimal_sep)
+        df_interco_capas = pd.read_csv(interco_capas_data_file, sep=column_sep, decimal=decimal_sep)
     # and select information needed for selected countries
-
-    return demand, agg_cf_data, agg_gen_capa_data
+    interco_capas = select_interco_capas(df_intercos_capa=df_interco_capas, countries=countries)
+    return demand, agg_cf_data, agg_gen_capa_data, interco_capas
     
