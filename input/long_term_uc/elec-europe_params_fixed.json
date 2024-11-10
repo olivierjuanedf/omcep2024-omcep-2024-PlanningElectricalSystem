@@ -148,6 +148,19 @@
       59.3306
     ]
   },
+  "interco_capas": {
+    "benelux2france": 3800,
+    "benelux2germany": 5000,
+    "benelux2scandinavia": 1400,
+    "france2benelux": 5300,
+    "france2germany": 4800,
+    "france2italy": 3138,
+    "germany2scandinavia": 3500,
+    "iberian-peninsula2france": 5000,
+    "poland2germany": 4864,
+    "poland2scandinavia": 600,
+    "scandinavia2germany": 3300
+  },
   "per_zone_color": {
     "benelux": "brown",
     "france": "purple",

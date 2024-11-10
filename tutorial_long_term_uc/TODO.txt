@@ -1,0 +1,7 @@
+1) JSON file with ERAA available values versus rest of static params in another JSON file (easier for students).
+And set available aggreg. prod type PER COUNTRY - to facilitate exercise
+2) Set interco_capas.csv file and integrate it instead of static values in JSON file
+3) Improve error msg when missing interco capa value (only couple corresponding to missing value, not list of all countries).
+And lexicographically ordered
+4) Add possibility to set Stock (additional to ERAA data) in JSON tb modif input file
+5) Add possibility to provide additional fatal demand -> for iterations between UC and imperfect disaggreg..
