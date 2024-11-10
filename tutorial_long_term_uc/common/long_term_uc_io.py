@@ -63,6 +63,10 @@ def set_json_fixed_params_file() -> str:
     return os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_fixed.json")
 
 
+def set_json_eraa_avail_values_file() -> str:
+    return os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_eraa-available-values.json")
+
+
 def set_json_params_tb_modif_file() -> str:
     return os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_to-be-modif.json")
 

@@ -77,46 +77,6 @@
     "wind_offshore",
     "wind_onshore"
   ],
-  "available_climatic_years": [
-    1982,
-    1989,
-    1996,
-    2003,
-    2010,
-    2016
-  ],
-  "available_countries": [
-    "benelux",
-    "france",
-    "germany",
-    "iberian-peninsula",
-    "italy",
-    "poland",
-    "scandinavia"
-  ],
-  "available_aggreg_prod_types": [
-    "batteries",
-    "biofuel",
-    "coal",
-    "dsr",
-    "gas",
-    "hydro_pondage",
-    "hydro_pump_storage_closed_loop",
-    "hydro_pump_storage_open_loop",
-    "hydro_reservoir",
-    "hydro_run_of_river",
-    "nuclear",
-    "oil",
-    "others_fatal",
-    "solar_pv",
-    "solar_thermal",
-    "wind_offshore",
-    "wind_onshore"
-  ],
-  "available_target_years": [
-    2025,
-    2033
-  ],
   "eraa_edition": "2023.2",
   "gps_coordinates": {
     "benelux": [
@@ -147,19 +107,6 @@
       18.0461,
       59.3306
     ]
-  },
-  "interco_capas": {
-    "benelux2france": 3800,
-    "benelux2germany": 5000,
-    "benelux2scandinavia": 1400,
-    "france2benelux": 5300,
-    "france2germany": 4800,
-    "france2italy": 3138,
-    "germany2scandinavia": 3500,
-    "iberian-peninsula2france": 5000,
-    "poland2germany": 4864,
-    "poland2scandinavia": 600,
-    "scandinavia2germany": 3300
   },
   "per_zone_color": {
     "benelux": "brown",

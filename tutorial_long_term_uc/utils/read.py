@@ -1,7 +1,7 @@
 import json
 
-from common.long_term_uc_io import set_json_fixed_params_file, set_json_params_tb_modif_file, \
-    set_json_pypsa_static_params_file
+from common.long_term_uc_io import set_json_fixed_params_file, set_json_eraa_avail_values_file, \
+      set_json_params_tb_modif_file, set_json_pypsa_static_params_file
 from common.constants_extract_eraa_data import ERAADatasetDescr, PypsaStaticParams
 from common.uc_run_params import UCRunParams
 from common.error_msgs import print_out_msg
@@ -21,12 +21,17 @@ def check_and_load_json_file(json_file: str, file_descr: str = None) -> dict:
 
 def read_and_check_uc_run_params():
     json_fixed_params_file = set_json_fixed_params_file()
+    json_eraa_avail_values_file = set_json_eraa_avail_values_file()
     json_params_tb_modif_file = set_json_params_tb_modif_file()
     print_out_msg(msg_level="info", 
                   msg=f"Read and check long-term UC parameters; the ones modified in file {json_params_tb_modif_file}")
 
     json_params_fixed = check_and_load_json_file(json_file=json_fixed_params_file,
                                                  file_descr="JSON fixed params")
+    json_eraa_avail_values = check_and_load_json_file(json_file=json_fixed_params_file,
+                                                      file_descr="JSON ERAA available values")
+    # put this dictionary values into the "fixed values" one
+    json_params_fixed |= json_eraa_avail_values
     json_params_tb_modif = check_and_load_json_file(json_file=json_params_tb_modif_file,
                                                     file_descr="JSON params to be modif.")
 
