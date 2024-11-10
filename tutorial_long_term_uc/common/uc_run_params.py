@@ -31,6 +31,8 @@ class UCRunParams:
     selected_agg_prod_types: Dict[str, Optional[List[str]]]
     uc_period_start: Union[str, datetime]
     uc_period_end: Union[str, datetime] = None
+    failure_power_capa: float = None
+    failure_penalty: float = None
 
     def __repr__(self):
         repr_str = "UC long-term model run with params:"
