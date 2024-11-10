@@ -2,7 +2,7 @@ from pathlib import Path
 from datetime import datetime
 import pandas as pd
 import numpy as np
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union
 from dataclasses import dataclass
 import pypsa
 
@@ -192,32 +192,45 @@ def add_loads(network, demand: Dict[str, pd.DataFrame]):
 
 
 from itertools import product
-from common.constants_interco_capas import INTERCO_CAPAS
 
 
-def add_interco_links(network, countries: List[str]):
+def get_current_interco_capa(interco_capas: Dict[Tuple[str, str], float], country_origin: str, 
+                             country_dest: str) -> (Optional[float], Optional[bool]):
+    link_tuple = (country_origin, country_dest)
+    reverse_link_tuple = (country_dest, country_origin)
+    if link_tuple in interco_capas:
+        current_interco_capa = interco_capas[link_tuple]
+        is_sym_interco = reverse_link_tuple not in interco_capas
+    elif reverse_link_tuple in interco_capas:
+        current_interco_capa = interco_capas[reverse_link_tuple]
+        is_sym_interco = True
+    else:
+        current_interco_capa = None
+        is_sym_interco = None
+    return current_interco_capa, is_sym_interco
+
+
+def add_interco_links(network, countries: List[str], interco_capas: Dict[Tuple[str, str], float]):
     print(f"Add interco. links - between the selected countries: {countries}")
     links = []
+    symmetric_links = []
     links_wo_capa_msg = []
     for country_origin, country_dest in product(countries, countries):
-        if not country_origin == country_dest:
+        link_tuple = (country_origin, country_dest)
+        # do not add link for (country, country); neither for symmetric links already treated 
+        # (as bidirectional setting p_min_pu=-1)
+        if not country_origin == country_dest and link_tuple not in symmetric_links:
             # TODO: fix AC/DC.... all AC here in names but not true (cf. CS students data)
-            current_link_capa = INTERCO_CAPAS[(country_origin, country_dest)]
-            current_reverse_link_capa = INTERCO_CAPAS[(country_dest, country_origin)]
-            if current_link_capa is None:
-                is_sym_interco = True
-                current_link_capa = current_reverse_link_capa 
-            elif current_reverse_link_capa is None:
-                is_sym_interco = True
-            else:
-                is_sym_interco = False
-            if current_link_capa is None:
+            current_interco_capa, is_sym_interco = \
+                get_current_interco_capa(interco_capas=interco_capas, country_origin=country_origin,
+                                         country_dest=country_dest)
+            if current_interco_capa is None:
                 # if symmetrical interco order lexicographically to fit with input data format
                 if is_sym_interco is True:
                     link_wo_capa = lexico_compar_str(string1=country_origin,
                                                      string2=country_dest, return_tuple=True)
                 else:
-                    link_wo_capa = (country_origin, country_dest)
+                    link_wo_capa = link_tuple
                 link_wo_capa_msg = f"({link_wo_capa[0]}, {link_wo_capa[1]})"
                 if link_wo_capa_msg not in links_wo_capa_msg:
                     links_wo_capa_msg.append(f"({link_wo_capa[0]}, {link_wo_capa[1]})")
@@ -226,11 +239,12 @@ def add_interco_links(network, countries: List[str]):
                 country_dest_bus_name = get_country_bus_name(country=country_dest)
                 if is_sym_interco is True:
                     p_min_pu, p_max_pu = -1, 1
+                    symmetric_links.append(link_tuple)
                 else:
                     p_min_pu, p_max_pu = 0, 1
                 links.append({"name": f"{country_origin_bus_name}-{country_dest_bus_name}_ac", 
                             "bus0": f"{country_origin_bus_name}", "bus1": f"{country_dest_bus_name}", 
-                            "p_nom": current_link_capa, "p_min_pu": p_min_pu, "p_max_pu" : p_max_pu}
+                            "p_nom": current_interco_capa, "p_min_pu": p_min_pu, "p_max_pu" : p_max_pu}
                             )
     if len(links_wo_capa_msg) > 0:
         print_errors_list(error_name="-> interco. links without capacity data", 

@@ -47,7 +47,8 @@ from fuel_sources import FUEL_SOURCES
 network = add_energy_carrier(network=network, fuel_sources=FUEL_SOURCES)
 network = add_generators(network=network, generators_data=generation_units_data)
 network = add_loads(network=network, demand=demand)
-network = add_interco_links(network, countries=uc_run_params.selected_countries)
+network = add_interco_links(network, countries=uc_run_params.selected_countries, 
+                            interco_capas=interco_capas)
 print("PyPSA network main properties:", network)
 network.plot(title="My little elec. Europe network", color_geomap=True, jitter=0.3)
 print("Optimize 'network' - i.e. solve associated UC problem")
