@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List
+from typing import Dict, List, Tuple
 import pandas as pd
 from datetime import datetime
 
@@ -10,7 +10,7 @@ from common.long_term_uc_io import INPUT_ERAA_FOLDER, DT_SUBFOLDERS, DT_FILE_PRE
 from common.uc_run_params import UCRunParams
 from utils.basic_utils import str_sanitizer
 from utils.df_utils import cast_df_col_as_date, concatenate_dfs, selec_in_df_based_on_list, \
-    set_aggreg_col_based_on_corresp, get_subdf_from_date_range
+    set_aggreg_col_based_on_corresp, get_subdf_from_date_range, create_dict_from_cols_in_df
 
 
 
@@ -60,7 +60,8 @@ def select_interco_capas(df_intercos_capa: pd.DataFrame, countries: List[str]) -
 
 def get_countries_data(uc_run_params: UCRunParams, agg_prod_types_with_cf_data: List[str],
                        aggreg_prod_types_def: Dict[str, List[str]]) \
-                        -> (Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], pd.DataFrame):
+                        -> (Dict[str, pd.DataFrame], Dict[str, pd.DataFrame], 
+                            Dict[str, pd.DataFrame], Dict[Tuple[str, str], float]):
     """
     Get ERAA data necessary for the selected countries
     :param uc_run_params: UC run parameters, from which main reading infos will be obtained
@@ -188,6 +189,17 @@ def get_countries_data(uc_run_params: UCRunParams, agg_prod_types_with_cf_data: 
     else:
         df_interco_capas = pd.read_csv(interco_capas_data_file, sep=column_sep, decimal=decimal_sep)
     # and select information needed for selected countries
-    interco_capas = select_interco_capas(df_intercos_capa=df_interco_capas, countries=countries)
+    df_interco_capas = select_interco_capas(df_intercos_capa=df_interco_capas, countries=countries)
+    # set as dictionary
+    origin_col = COLUMN_NAMES.zone_origin
+    destination_col = COLUMN_NAMES.zone_destination
+    tuple_key_col = "tuple_key"
+    df_interco_capas[tuple_key_col] = \
+        df_interco_capas.apply(lambda col: (col[origin_col], col[destination_col]),
+                               axis=1)
+    interco_capas = create_dict_from_cols_in_df(df=df_interco_capas, key_col=tuple_key_col, val_col=value_col)
+    # add interco capas values set by user
+    interco_capas |= uc_run_params.interco_capas_added_values 
+
     return demand, agg_cf_data, agg_gen_capa_data, interco_capas
     

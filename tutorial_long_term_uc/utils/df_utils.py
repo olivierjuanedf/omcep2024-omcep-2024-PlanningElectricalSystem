@@ -49,3 +49,8 @@ def get_subdf_from_date_range(df: pd.DataFrame, date_col: str, date_min: datetim
     """
     df_range = df[(date_min <= df[date_col]) & (df[date_col] < date_max)]
     return df_range
+
+
+def create_dict_from_cols_in_df(df: pd.DataFrame, key_col, val_col) -> dict:
+    df_to_dict = df[[key_col, val_col]]
+    return dict(pd.MultiIndex.from_frame(df_to_dict))
