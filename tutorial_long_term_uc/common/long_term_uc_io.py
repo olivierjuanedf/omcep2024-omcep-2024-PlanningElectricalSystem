@@ -8,6 +8,7 @@ class DtSubfolders:
     demand: str = "demand"
     res_capa_factors: str = "res_capa-factors"
     generation_capas: str = "generation_capas"
+    interco_capas: str = "interco_capas"
 
 
 @dataclass
@@ -15,6 +16,7 @@ class DtFilePrefix:
     demand: str = "demand"
     res_capa_factors: str = "capa_factor"
     generation_capas: str = "generation-capa"
+    interco_capas: str = "interco-capas"
 
 
 @dataclass

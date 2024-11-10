@@ -60,10 +60,12 @@ def get_countries_data(uc_run_params: UCRunParams, agg_prod_types_with_cf_data: 
     demand_folder = os.path.join(INPUT_ERAA_FOLDER, DT_SUBFOLDERS.demand)
     res_cf_folder = os.path.join(INPUT_ERAA_FOLDER, DT_SUBFOLDERS.res_capa_factors)
     gen_capas_folder = os.path.join(INPUT_ERAA_FOLDER, DT_SUBFOLDERS.generation_capas)
+    interco_capas_folder = os.path.join(INPUT_ERAA_FOLDER, DT_SUBFOLDERS.interco_capas)
     # file prefix
     demand_prefix = DT_FILE_PREFIX.demand
     res_cf_prefix = DT_FILE_PREFIX.res_capa_factors
     gen_capas_prefix = DT_FILE_PREFIX.generation_capas
+    interco_capas_prefix = DT_FILE_PREFIX.interco_capas
     # column names
     date_col = COLUMN_NAMES.date
     climatic_year_col = COLUMN_NAMES.climatic_year
@@ -156,6 +158,15 @@ def get_countries_data(uc_run_params: UCRunParams, agg_prod_types_with_cf_data: 
                 selec_in_df_based_on_list(df=current_df_gen_capa, selec_col=prod_type_agg_col,
                                           selec_vals=selec_agg_prod_types[country], rm_selec_col=True)
             agg_gen_capa_data[country] = current_df_gen_capa
+
+    # read interconnection capas file
+    print("Get interconnection capacities, with unique file for all nodes (zones=countries) and year")
+    interco_capas_data_file = f"{interco_capas_folder}/{interco_capas_prefix}_{year}.csv"
+    if os.path.exists(interco_capas_data_file) is False:
+        print_out_msg(msg_level="warning", msg=f"Generation capas data file does not exist: {country} not accounted for here")
+    else:
+        df_intercos_capa = pd.read_csv(interco_capas_data_file, sep=column_sep, decimal=decimal_sep)
+    # and select information needed for selected countries
 
     return demand, agg_cf_data, agg_gen_capa_data
     
