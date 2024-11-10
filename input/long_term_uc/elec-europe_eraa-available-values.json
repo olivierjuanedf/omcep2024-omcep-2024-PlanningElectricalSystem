@@ -1,5 +1,5 @@
 {
-    "available_climatic_years": [
+    "climatic_years": [
       1982,
       1989,
       1996,
@@ -7,7 +7,7 @@
       2010,
       2016
     ],
-    "available_countries": [
+    "countries": [
       "benelux",
       "france",
       "germany",
@@ -16,11 +16,12 @@
       "poland",
       "scandinavia"
     ],
-    "available_aggreg_prod_types": [
+    "aggreg_prod_types": [
       "batteries",
       "biofuel",
       "coal",
       "dsr",
+      "failure",
       "gas",
       "hydro_pondage",
       "hydro_pump_storage_closed_loop",
@@ -35,11 +36,11 @@
       "wind_offshore",
       "wind_onshore"
     ],
-    "available_target_years": [
+    "target_years": [
       2025,
       2033
     ],
-    "available_intercos": [
+    "intercos": [
       "benelux2france",
       "benelux2germany",
       "benelux2scandinavia",

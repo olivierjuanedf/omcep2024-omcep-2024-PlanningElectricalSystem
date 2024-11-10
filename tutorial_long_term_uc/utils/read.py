@@ -30,6 +30,8 @@ def read_and_check_uc_run_params():
                                                  file_descr="JSON fixed params")
     json_eraa_avail_values = check_and_load_json_file(json_file=json_eraa_avail_values_file,
                                                       file_descr="JSON ERAA available values")
+    # add "avail_" to the different keys of JSON available values to make them more explicit in the following
+    json_eraa_avail_values = {f"available_{key}": val for key, val in json_eraa_avail_values.items()}
     # put this dictionary values into the "fixed values" one
     json_params_fixed |= json_eraa_avail_values
     json_params_tb_modif = check_and_load_json_file(json_file=json_params_tb_modif_file,
