@@ -1,4 +1,3 @@
-import sys
 from pathlib import Path
 from datetime import datetime
 import pandas as pd
@@ -10,6 +9,7 @@ import pypsa
 from common.error_msgs import print_errors_list, print_out_msg
 from common.long_term_uc_io import COMPLEM_DATA_SOURCES, COLUMN_NAMES
 from fuel_sources import FuelSources
+from utils.basic_utils import lexico_compar_str
 
 
 @dataclass
@@ -198,7 +198,7 @@ from common.constants_interco_capas import INTERCO_CAPAS
 def add_interco_links(network, countries: List[str]):
     print(f"Add interco. links - between the selected countries: {countries}")
     links = []
-    links_wo_capa_data = []
+    links_wo_capa_msg = []
     for country_origin, country_dest in product(countries, countries):
         if not country_origin == country_dest:
             # TODO: fix AC/DC.... all AC here in names but not true (cf. CS students data)
@@ -212,7 +212,15 @@ def add_interco_links(network, countries: List[str]):
             else:
                 is_sym_interco = False
             if current_link_capa is None:
-                links_wo_capa_data.append((country_origin, country_dest))
+                # if symmetrical interco order lexicographically to fit with input data format
+                if is_sym_interco is True:
+                    link_wo_capa = lexico_compar_str(string1=country_origin,
+                                                     string2=country_dest, return_tuple=True)
+                else:
+                    link_wo_capa = (country_origin, country_dest)
+                link_wo_capa_msg = f"({link_wo_capa[0]}, {link_wo_capa[1]})"
+                if link_wo_capa_msg not in links_wo_capa_msg:
+                    links_wo_capa_msg.append(f"({link_wo_capa[0]}, {link_wo_capa[1]})")
             else:
                 country_origin_bus_name = get_country_bus_name(country=country_origin)
                 country_dest_bus_name = get_country_bus_name(country=country_dest)
@@ -224,9 +232,9 @@ def add_interco_links(network, countries: List[str]):
                             "bus0": f"{country_origin_bus_name}", "bus1": f"{country_dest_bus_name}", 
                             "p_nom": current_link_capa, "p_min_pu": p_min_pu, "p_max_pu" : p_max_pu}
                             )
-    if len(links_wo_capa_data) > 0:
-        print_out_msg(msg_level="error", msg="There are interco. links without capacity data -> STOP")
-        sys.exit(1)
+    if len(links_wo_capa_msg) > 0:
+        print_errors_list(error_name="-> interco. links without capacity data", 
+                          errors_list=links_wo_capa_msg)
     
     # add to PyPSA network
     for link in links:

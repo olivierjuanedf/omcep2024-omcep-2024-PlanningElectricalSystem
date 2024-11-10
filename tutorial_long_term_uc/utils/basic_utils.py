@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 
 from common.constants_temporal import DAY_OF_WEEK
 from common.long_term_uc_io import DATE_FORMAT_PRINT
@@ -73,3 +73,18 @@ def are_lists_eq(list_of_lists: List[list]) -> bool:
         if (len(current_list) == len_first_list and set(current_list) == set_first_list) is False:
             return False
     return True
+
+
+def lexico_compar_str(string1: str, string2: str, return_tuple: bool = False) -> Union[str, Tuple[str, str]]:
+    i = 0
+    while i < len(string1) and i < len(string2):
+        if string1[i] < string2[i]:
+            return (string1, string2) if return_tuple is True else string1
+        elif string1[i] > string2[i]:
+            return (string2, string1) if return_tuple is True else string2
+        i += 1
+    # one of the strings starts with the other
+    if len(string2) > len(string1):
+        return (string1, string2) if return_tuple is True else string1
+    else:
+        return (string2, string1) if return_tuple is True else string2

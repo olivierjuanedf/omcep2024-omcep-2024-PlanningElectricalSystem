@@ -1,11 +1,11 @@
 {
   "selected_climatic_year": 1989,
-  "selected_countries": ["france", "italy"],
+  "selected_countries": ["france", "italy", "germany"],
   "selected_target_year": 2025,
   "selected_agg_prod_types": {
     "benelux": null,
     "france": ["coal"],
-    "germany": null,
+    "germany": ["coal"],
     "iberian-peninsula": null,
     "italy": ["coal", "gas", "hydro_reservoir", "nuclear", "oil", "solar_pv", "solar_thermal", 
               "wind_offshore", "wind_onshore"],
