@@ -4,6 +4,9 @@ from typing import Dict, List, Tuple, Union
 from utils.basic_utils import is_str_bool
 
 
+INTERCO_STR_SEP = "2"
+
+
 @dataclass
 class ERAADatasetDescr:
     # {datatype: {aggreg. prod. type: list of ERAA prod types}}
@@ -12,6 +15,7 @@ class ERAADatasetDescr:
     available_climatic_years: List[int]
     available_countries: List[str]
     available_aggreg_prod_types: List[str]
+    available_intercos: Union[List[str], List[Tuple[str, str]]]
     available_target_years: List[int]  # N.B. "target year" is a "year" in ERAA terminology
     eraa_edition: str
     # per (meta-)country GPS coordinates - only for network plot
@@ -29,7 +33,9 @@ class ERAADatasetDescr:
                     self.pypsa_unit_params_per_agg_pt[agg_pt][param_name] = bool(param_val)
         for country in self.gps_coordinates:
             self.gps_coordinates[country] = tuple(self.gps_coordinates[country])
-
+        # from "{zone_origin}2{zone_dest}" format of interco names to tuples (zone_origin, zone_dest)
+        new_avail_intercos = [tuple(interco.split(INTERCO_STR_SEP)) for interco in self.available_intercos]
+        self.available_intercos = new_avail_intercos
 
 
 ALL_UNITS_KEY = "all_units"

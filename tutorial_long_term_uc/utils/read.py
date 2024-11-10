@@ -28,7 +28,7 @@ def read_and_check_uc_run_params():
 
     json_params_fixed = check_and_load_json_file(json_file=json_fixed_params_file,
                                                  file_descr="JSON fixed params")
-    json_eraa_avail_values = check_and_load_json_file(json_file=json_fixed_params_file,
+    json_eraa_avail_values = check_and_load_json_file(json_file=json_eraa_avail_values_file,
                                                       file_descr="JSON ERAA available values")
     # put this dictionary values into the "fixed values" one
     json_params_fixed |= json_eraa_avail_values
