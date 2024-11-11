@@ -3,7 +3,7 @@ Read JSON parametrization files... and check coherence of them
 """
 from utils.read import read_and_check_uc_run_params
 
-eraa_data_descr, uc_run_params = read_and_check_uc_run_params()
+usage_params, eraa_data_descr, uc_run_params = read_and_check_uc_run_params()
 
 """
 Get needed data (demand, RES Capa. Factors, installed generation capacities)

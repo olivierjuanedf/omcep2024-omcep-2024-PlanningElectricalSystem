@@ -54,7 +54,9 @@ FILES_FORMAT = FilesFormat()
 GEN_CAPA_SUBDT_COLS = ["power_capacity", "power_capacity_turbine", "power_capacity_pumping", 
                        "power_capacity_injection", "power_capacity_offtake"]
 INPUT_ERAA_FOLDER = "data/ERAA_2023-2"
-INPUT_LT_UC_FOLDER = "input/long_term_uc"
+INPUT_FOLDER = "input"
+INPUT_LT_UC_SUBFOLDER = f"{INPUT_FOLDER}/long_term_uc"
+INPUT_FUNC_PARAMS_SUBFOLDER = f"{INPUT_FOLDER}/functional_params"
 INTERCO_STR_SEP = "2"
 # first date in ERAA data (fictive 364 days calendar)
 MIN_DATE_IN_DATA = datetime(year=1900, month=1, day=1)
@@ -64,20 +66,24 @@ OUTPUT_DATA_FOLDER = "output/long_term_uc/data"
 OUTPUT_FIG_FOLDER = "output/long_term_uc/figures"
 
 
+def set_json_usage_params_file() -> str:
+    return os.path.join(INPUT_FUNC_PARAMS_SUBFOLDER, "usage_params.json")
+
+
 def set_json_fixed_params_file() -> str:
-    return os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_fixed.json")
+    return os.path.join(INPUT_LT_UC_SUBFOLDER, "elec-europe_params_fixed.json")
 
 
 def set_json_eraa_avail_values_file() -> str:
-    return os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_eraa-available-values.json")
+    return os.path.join(INPUT_LT_UC_SUBFOLDER, "elec-europe_eraa-available-values.json")
 
 
 def set_json_params_tb_modif_file() -> str:
-    return os.path.join(INPUT_LT_UC_FOLDER, "elec-europe_params_to-be-modif.json")
+    return os.path.join(INPUT_LT_UC_SUBFOLDER, "elec-europe_params_to-be-modif.json")
 
 
 def set_json_pypsa_static_params_file() -> str:
-    return os.path.join(LT_UC_COMMON_FOLDER, "pypsa_static_params.json") 
+    return os.path.join(INPUT_LT_UC_SUBFOLDER, "pypsa_static_params.json") 
 
 
 def set_prod_figure(country: str, year: int, start_horizon: datetime) -> str:

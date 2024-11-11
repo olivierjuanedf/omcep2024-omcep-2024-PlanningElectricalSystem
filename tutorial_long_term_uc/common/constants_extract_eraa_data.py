@@ -6,6 +6,19 @@ from utils.eraa_utils import set_interco_to_tuples
 
 
 INTERCO_STR_SEP = "2"
+USAGE_PARAMS_SHORT_NAMES = {"allow_adding_interco_capas": "adding_interco_capas", 
+                            "allow_overwriting_eraa_interco_capa_vals": "overwriting_eraa_interco_capa_vals", 
+                            "allow_manually_adding_demand": "manually_adding_demand",
+                            "allow_manually_adding_generators": "manually_adding_generators"
+                            }
+
+    
+@dataclass
+class UsageParameters:
+    adding_interco_capas: bool = False
+    overwriting_eraa_interco_capa_vals: bool = False 
+    manually_adding_demand: bool = False
+    manually_adding_generators: bool = False
 
 
 @dataclass
