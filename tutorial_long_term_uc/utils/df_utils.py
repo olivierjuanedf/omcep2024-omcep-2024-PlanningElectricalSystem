@@ -10,17 +10,8 @@ def cast_df_col_as_date(df: pd.DataFrame, date_col: str, date_format: str) -> pd
     return df
 
 
-def selec_in_df_based_on_list(df: pd.DataFrame, selec_col, selec_vals: list, rm_selec_col: bool = False) \
-        -> pd.DataFrame:
-    pd.options.mode.chained_assignment = None
-    selec_bool_col = f"is_selec_{selec_col}"
-    df[selec_bool_col] = df[selec_col].apply(lambda x: 1 if x in selec_vals else 0)
-    df_selec = df[df[selec_bool_col] == 1]
-    if rm_selec_col is True:
-        all_cols = list(df_selec.columns)
-        all_cols.remove(selec_bool_col)
-        df_selec = df_selec[all_cols]
-    return df_selec
+def selec_in_df_based_on_list(df: pd.DataFrame, selec_col, selec_vals: list) -> pd.DataFrame:
+    return df.loc[df[selec_col].isin(selec_vals)]
 
 
 def concatenate_dfs(dfs: List[pd.DataFrame], reset_index: bool = True) -> pd.DataFrame:

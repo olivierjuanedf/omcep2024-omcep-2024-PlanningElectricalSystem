@@ -22,7 +22,7 @@ def filter_input_data(df: pd.DataFrame, date_col: str, climatic_year_col: str, p
     df_filtered = get_subdf_from_date_range(df=df, date_col=date_col, date_min=period_start, date_max=period_end)
     # then selected climatic year
     df_filtered = selec_in_df_based_on_list(df=df_filtered, selec_col=climatic_year_col, 
-                                            selec_vals=[climatic_year], rm_selec_col=True)
+                                            selec_vals=[climatic_year])
     return df_filtered
 
 
@@ -178,7 +178,7 @@ def get_countries_data(uc_run_params: UCRunParams, agg_prod_types_with_cf_data: 
                                                 agg_corresp=aggreg_pt_gen_capa_def, common_aggreg_ope="sum")
             current_df_gen_capa = \
                 selec_in_df_based_on_list(df=current_df_gen_capa, selec_col=prod_type_agg_col,
-                                          selec_vals=selec_agg_prod_types[country], rm_selec_col=True)
+                                          selec_vals=selec_agg_prod_types[country])
             agg_gen_capa_data[country] = current_df_gen_capa
 
     # read interconnection capas file
