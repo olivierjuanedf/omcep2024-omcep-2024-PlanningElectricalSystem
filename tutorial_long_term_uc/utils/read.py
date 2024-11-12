@@ -26,6 +26,9 @@ def read_and_check_uc_run_params():
     json_fixed_params_file = set_json_fixed_params_file()
     json_eraa_avail_values_file = set_json_eraa_avail_values_file()
     json_params_tb_modif_file = set_json_params_tb_modif_file()
+    # TODO[ATHENS]: read 3 JSON files then func check_and_run UC (allow)
+    # for the students script (i) call read + (ii) own loop changing parameters (iii) call check_and_run
+    # WITH run_name param to identify file with output results (if None no suffix added)
     print_out_msg(msg_level="info", 
                   msg=f"Read and check long-term UC parameters; the ones modified in file {json_params_tb_modif_file}")
     # read them and do some basic operations on obtained dictionaries

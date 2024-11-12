@@ -34,7 +34,7 @@ class UCRunParams:
     uc_period_end: Union[str, datetime] = None
     failure_power_capa: float = None
     failure_penalty: float = None
-    interco_capas_added_values: Union[Dict[str, float], Dict[Tuple[str, str], float]] = None
+    interco_capas_updated_values: Union[Dict[str, float], Dict[Tuple[str, str], float]] = None
 
     def __repr__(self):
         repr_str = "UC long-term model run with params:"
@@ -61,13 +61,13 @@ class UCRunParams:
                 or self.selected_agg_prod_types[country] is None:
                 self.selected_agg_prod_types[country] = []
         # empty dict if interco. added values is empty
-        if self.interco_capas_added_values is None:
-            self.interco_capas_added_values = {}
+        if self.interco_capas_updated_values is None:
+            self.interco_capas_updated_values = {}
         else:  # set interco. from {zone_origin}2{zone_destination} names to tuples
-            interco_tuples = set_interco_to_tuples(interco_names=self.interco_capas_added_values,
+            interco_tuples = set_interco_to_tuples(interco_names=self.interco_capas_updated_values,
                                                    return_corresp=True)
             self.interco_capas_added_values = {interco_tuples[key]: val 
-                                               for key, val in self.interco_capas_added_values.items()}
+                                               for key, val in self.interco_capas_updated_values.items()}
 
     def coherence_check(self, eraa_data_descr: ERAADatasetDescr):
         errors_list = []
