@@ -50,9 +50,6 @@ def apply_data_type_check(data_type: str, data_val) -> bool:
                       msg=f"Function to check data type {data_type} is None (not defined) -> STOP")
         sys.exit(1)
 
-    # apply and check true
-    return DATA_TYPE_CHECKERS[checker_name]
-
 
 # correspondence between types and associated functions (and additional keyword args when applicable) 
 # to be applied for type check
