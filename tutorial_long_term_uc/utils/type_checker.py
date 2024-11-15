@@ -41,11 +41,26 @@ def check_three_level_str_dict(data_val) -> bool:
     return all([(isinstance(key, str) and check_str_str_dict(data_val=val)) for key, val in data_val.items()])
 
 
-DATA_TYPE_CHECKERS = {"str": check_str, "none_or_list_of_str": check_none_or_list_of_str}
-
-
-def check_data_type(checker_name: str, data_val) -> bool:
-    if checker_name not in DATA_TYPE_CHECKERS:
-        print_out_msg(msg_level="error", msg="Unknown data type checker name -> STOP")
+def apply_data_type_check(data_type: str, data_val) -> bool:
+    if data_type not in CHECK_FUNCTIONS:
+        print_out_msg(msg_level="error", msg=f"Unknown data type for check {data_type} -> STOP")
         sys.exit(1)
+    if CHECK_FUNCTIONS[data_type] is None:
+        print_out_msg(msg_level="error", 
+                      msg=f"Function to check data type {data_type} is None (not defined) -> STOP")
+        sys.exit(1)
+
+    # apply and check true
     return DATA_TYPE_CHECKERS[checker_name]
+
+
+# correspondence between types and associated functions (and additional keyword args when applicable) 
+# to be applied for type check
+CHECK_FUNCTIONS = {"dict_str_dict": None, "dict_str_str": (check_str_str_dict,),
+                   "dict_str_list_of_float": None,
+                   "list_of_int": (check_list_of_given_type, {"needed_type": int}),
+                   "list_of_str": (check_list_of_given_type, {"needed_type": str}),
+                   "none_or_list_of_str": (check_none_or_list_of_str,),
+                   "str": (check_str,), 
+                   "two_level_dict_str_str_list-of-str": None,
+                   "two_level_dict_str_str_str": None}

@@ -21,6 +21,23 @@ class UsageParameters:
     manually_adding_generators: bool = False
 
 
+# raw types (just after reading) of the following attributes 
+# -> for "direct" check to stop asap if erroneous values
+# TODO: define complex types in a dataclass (centralized)
+RAW_TYPES_FOR_CHECK = {"aggreg_prod_types_def": "two_level_dict_str_str_list-of-str",
+                       "agg_prod_types_with_cf_data": "list_of_str",
+                       "available_climatic_years": "list_of_int",
+                       "available_countries": "list_of_str",
+                       "available_aggreg_prod_types": "list_of_str",
+                       "available_intercos": "list_of_str",
+                       "available_target_years": "list_of_int",
+                       "eraa_edition": "str",
+                       "gps_coordinates": "dict_str_list_of_float",
+                       "per_agg_prod_type_color": "dict_str_str",
+                       "per_zone_color": "dict_str_str",
+                       "pypsa_unit_params_per_agg_pt": "dict_str_dict",
+                       "units_complem_params_per_agg_pt": "two_level_dict_str_str_str"}
+
 @dataclass
 class ERAADatasetDescr:
     # {datatype: {aggreg. prod. type: list of ERAA prod types}}
@@ -39,6 +56,14 @@ class ERAADatasetDescr:
     pypsa_unit_params_per_agg_pt: Dict[str, dict]  # dict of per aggreg. prod type main Pypsa params
     # for each aggreg. prod type, a dict. {complem. param name: source - "from_json_tb_modif"/"from_eraa_data"}
     units_complem_params_per_agg_pt: Dict[str, Dict[str, str]]
+
+    def check(self):
+        """
+        Check coherence of values/types
+        """
+        check_results = []
+        for attr_tb_checked, type_for_check in TYPES_FOR_CHECK.items():
+
 
     def process(self):
         for agg_pt, pypsa_params in self.pypsa_unit_params_per_agg_pt.items():
